@@ -1,0 +1,92 @@
+import React, { useState } from 'react';
+import ProjectCard from '../ui/ProjectCard';
+import Modal from '../ui/Modal';
+import ProjectDetail from './ProjectDetail';
+
+const projects = [
+    {
+        name: "My Truck Transport",
+        category: "Desktop App & SaaS",
+        color: "from-orange-500 to-red-600",
+        description: "Solution complète de gestion logistique utilisée en production. Dashboard Admin puissant, Communication temps réel et Suivi de flotte.",
+        tags: ["Electron", "NestJS", "Mapbox", "WebSocket"],
+        features: [
+            "Dashboard Admin Temps Réel (Vue Satellite)",
+            "Messagerie instantanée Chauffeur <-> Admin",
+            "Génération automatique des bordereaux de livraison",
+            "Mode Déconnecté (Sync automatique)"
+        ],
+        className: "md:col-span-8",
+        image: "/projects/mytruck_hero.png",
+        gallery: [
+            "/projects/mytruck_dashboard_privacy.png",
+            "/projects/mytruck_map_raw.png",
+            "/projects/mytruck_drivers_privacy.png",
+            "/projects/mytruck_features.png"
+        ],
+        liveUrl: "https://mytruck-transport.vercel.app/"
+    },
+    {
+        name: "O'Boricienne Burgers",
+        category: "Mobile App & FoodTech",
+        color: "from-yellow-400 to-orange-600",
+        description: "L'expérience de commande ultime. 3 clics pour manger, un programme de fidélité addictif et une identité de marque forte.",
+        tags: ["Mobile Native", "PWA", "Real-time Tracking", "Gamification"],
+        features: [
+            "Commande ultra-rapide en 3 étapes",
+            "Programme fidélité 'Adventure' (Badges & Niveaux)",
+            "Suivi de commande GPS type 'Uber Eats'",
+            "Design 'Dark Mode' immersif"
+        ],
+        className: "md:col-span-4",
+        image: "/projects/oboricienne_hero.png",
+        gallery: ["/projects/oboricienne_hits.png"],
+        liveUrl: "https://oboricienne-burger.vercel.app/"
+    },
+    {
+        name: "CheckAll Eat",
+        category: "FoodTech & Delivery",
+        color: "from-emerald-400 to-cyan-500",
+        description: "L'avenir de la livraison avec suivi live.",
+        tags: ["Mobile App", "Geolocation", "UX/UI"],
+        features: [
+            "Géolocalisation haute précision",
+            "Algorithme de matching livreur/resto",
+            "Paiement in-app sécurisé"
+        ],
+        className: "md:col-span-12",
+        image: "/projects/checkalleat.png"
+    }
+];
+
+const BentoGrid = () => {
+    const [selectedProject, setSelectedProject] = useState(null);
+
+    return (
+        <section id="projects" className="max-w-7xl mx-auto px-6 py-24 relative z-20">
+            <div className="mb-12">
+                <h2 className="text-3xl md:text-5xl font-bold mb-4">Nos Réalisations</h2>
+                <p className="text-gray-400 max-w-2xl">
+                    Cliquez sur un projet pour découvrir l'envers du décor : stack technique, défis relevés et résultats.
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[450px]">
+                {projects.map((project, index) => (
+                    <div key={project.name} onClick={() => setSelectedProject(project)} className={`${project.className} cursor - pointer`}>
+                        <ProjectCard
+                            project={project}
+                            className="h-full"
+                        />
+                    </div>
+                ))}
+            </div>
+
+            <Modal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)}>
+                <ProjectDetail project={selectedProject} />
+            </Modal>
+        </section>
+    );
+};
+
+export default BentoGrid;
