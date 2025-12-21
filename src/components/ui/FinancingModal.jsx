@@ -61,25 +61,25 @@ const FinancingModal = ({ isOpen, onClose, initialBudget = 10000 }) => {
                     initial={{ scale: 0.9, y: 20, opacity: 0 }}
                     animate={{ scale: 1, y: 0, opacity: 1 }}
                     exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                    className="relative bg-urban-gray border border-white/10 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl"
+                    className="relative bg-urban-gray border border-white/10 w-full max-w-4xl rounded-3xl shadow-2xl max-h-[90vh] flex flex-col"
                 >
                     {/* Header */}
-                    <div className="p-8 border-b border-white/5 flex justify-between items-center relative overflow-hidden">
+                    <div className="p-8 border-b border-white/5 flex justify-between items-center relative overflow-hidden shrink-0">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-red-600" />
                         <div>
-                            <h2 className="text-3xl font-black mb-1">Simulateur de Financement</h2>
-                            <p className="text-gray-400">Trouvez la formule adaptée à votre ambition.</p>
+                            <h2 className="text-2xl md:text-3xl font-black mb-1">Simulateur de Financement</h2>
+                            <p className="text-gray-400 text-sm md:text-base">Trouvez la formule adaptée à votre ambition.</p>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
                             <X size={24} />
                         </button>
                     </div>
 
-                    <div className="p-8">
+                    <div className="p-6 md:p-8 overflow-y-auto">
                         {/* Budget Slider */}
                         <div className="mb-12 text-center">
                             <label className="text-gray-400 text-sm uppercase tracking-wider font-bold mb-4 block">Montant Estimé du Projet</label>
-                            <div className="text-5xl font-black text-white mb-6 font-inter">
+                            <div className="text-4xl md:text-5xl font-black text-white mb-6 font-inter">
                                 {budget.toLocaleString('fr-FR')} €
                             </div>
                             <input
@@ -142,7 +142,7 @@ const FinancingModal = ({ isOpen, onClose, initialBudget = 10000 }) => {
                     </div>
 
                     {/* Footer Notice */}
-                    <div className="p-6 bg-black/20 border-t border-white/5 text-center">
+                    <div className="p-6 bg-black/20 border-t border-white/5 text-center shrink-0">
                         <p className="text-xs text-gray-500">
                             *Le financement 10x est soumis à l'acceptation du dossier par nos soins.
                             Un acompte de 30% est requis au démarrage pour les offres standards.

@@ -42,8 +42,12 @@ const QuoteSimulator = () => {
     const calculateEstimate = () => {
         const base = selections.type?.price || 0;
         const mult = selections.complexity?.multiplier || 1;
-        return base * mult;
+        const myPrice = base * mult;
+        const marketPrice = Math.round(myPrice * 1.6); // 60% markup for standard agencies
+        return { myPrice, marketPrice };
     };
+
+    const estimates = showResult ? calculateEstimate() : { myPrice: 0, marketPrice: 0 };
 
     const reset = () => {
         setCurrentStep(0);
@@ -101,9 +105,22 @@ const QuoteSimulator = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="text-center w-full"
                             >
-                                <div className="mb-2 text-gray-400 uppercase tracking-widest text-sm font-bold">Estimation Préliminaire</div>
-                                <div className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500 mb-8 font-inter tracking-tighter">
-                                    {calculateEstimate().toLocaleString('fr-FR')}€*
+                                <div className="space-y-2 mb-8">
+                                    <div className="flex items-center justify-center gap-3 text-gray-400">
+                                        <span className="text-lg line-through decoration-red-500/50">
+                                            Moyenne Agence : {estimates.marketPrice.toLocaleString('fr-FR')} €
+                                        </span>
+                                    </div>
+
+                                    <div className="relative inline-block">
+                                        <div className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500 font-inter tracking-tighter">
+                                            {estimates.myPrice.toLocaleString('fr-FR')} €*
+                                        </div>
+                                        <div className="absolute -top-6 -right-12 rotate-12 bg-green-500 text-black font-bold text-xs px-3 py-1 rounded-full shadow-lg animate-pulse">
+                                            -{((1 - estimates.myPrice / estimates.marketPrice) * 100).toFixed(0)}% Économisé
+                                        </div>
+                                    </div>
+                                    <div className="text-sm text-gray-400 font-medium">Offre Digiltizème Elite</div>
                                 </div>
 
                                 <div className="flex flex-col md:flex-row items-center justify-center gap-4">
@@ -122,7 +139,10 @@ const QuoteSimulator = () => {
                                         <RefreshCw size={18} /> Recommencer
                                     </button>
                                 </div>
-                                <p className="mt-8 text-xs text-gray-500">*Ceci est une estimation brute basée sur des paramètres standards. Le prix final dépendra du cahier des charges détaillé.</p>
+                                <p className="mt-8 text-xs text-gray-500 max-w-lg mx-auto">
+                                    *Estimation basée sur nos TJM optimisés vs moyenne marché (Agences Paris).
+                                    Le prix final dépendra du périmètre exact validé ensemble.
+                                </p>
                             </motion.div>
                         )}
                     </AnimatePresence>

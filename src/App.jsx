@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MainLayout from './components/layout/MainLayout';
 import Hero from './components/sections/Hero';
 import BentoGrid from './components/sections/BentoGrid';
+import Services from './components/sections/Services';
 import QuoteSimulator from './components/sections/QuoteSimulator';
 import Methodology from './components/sections/Methodology';
 import Footer from './components/sections/Footer';
@@ -14,6 +15,7 @@ function App() {
     <MainLayout>
       <Hero />
       <BentoGrid />
+      <Services />
       <QuoteSimulator />
       <Methodology onOpenFinancing={() => setIsFinancingOpen(true)} />
       <Footer />

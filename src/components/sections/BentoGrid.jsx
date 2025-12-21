@@ -56,6 +56,28 @@ const projects = [
         ],
         className: "md:col-span-12",
         image: "/projects/checkalleat.png"
+    },
+    {
+        name: "Finded",
+        category: "Marketplace & Social",
+        color: "from-purple-500 to-indigo-600",
+        description: "Plateforme de mise en relation clients / prestataires. Géolocalisation, messagerie temps réel et gestion de profil avancée.",
+        tags: ["React Native", "Node.js", "Socket.io", "MongoDB"],
+        features: [
+            "Recherche de prestataires géolocalisée (Map)",
+            "Chat en temps réel (Socket.io)",
+            "Système de notation et avis",
+            "Authentification sécurisée (JWT)"
+        ],
+        className: "md:col-span-12",
+        video: "/projects/finded_demo.mp4",
+        contributors: [
+            { name: "Benjamin D'ONOFRIO", role: "Dev Fullstack" },
+            { name: "Santiago TONOLI", role: "Dev Frontend" },
+            { name: "Hadama SAMASSA", role: "Dev Backend" },
+            { name: "Léo BACCIALONE", role: "Lead Dev / Dev Fullstack" }
+        ],
+        image: "/projects/finded_preview.png" // Fallback or thumbnail if needed, sticking to video primarily
     }
 ];
 

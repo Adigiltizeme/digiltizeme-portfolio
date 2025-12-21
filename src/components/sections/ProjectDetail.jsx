@@ -45,24 +45,37 @@ const ProjectDetail = ({ project }) => {
 
             {/* Left Column: Visuals */}
             <div className="lg:w-7/12 bg-black/30 p-8 flex flex-col gap-6">
-                {/* Main Hero Image */}
+                {/* Main Media (Video or Image) */}
                 <div
-                    className="rounded-2xl overflow-hidden border border-white/5 shadow-lg relative group cursor-zoom-in"
-                    onClick={() => setSelectedImage(project.image)}
+                    className="rounded-2xl overflow-hidden border border-white/5 shadow-lg relative group"
+                    onClick={() => !project.video && setSelectedImage(project.image)} // Only zoom if image
                 >
-                    <img
-                        src={project.image}
-                        alt={project.name}
-                        className="w-full h-auto object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold flex items-center gap-2 border border-white/10">
-                            <ZoomIn size={16} /> Agrandir
-                        </span>
-                    </div>
+                    {project.video ? (
+                        <video
+                            src={project.video}
+                            controls
+                            className="w-full h-auto object-cover"
+                            loop
+                            muted
+                            autoPlay
+                        />
+                    ) : (
+                        <>
+                            <img
+                                src={project.image}
+                                alt={project.name}
+                                className="w-full h-auto object-cover cursor-zoom-in"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <span className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold flex items-center gap-2 border border-white/10">
+                                    <ZoomIn size={16} /> Agrandir
+                                </span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
-                {/* Secondary Screenshots (if Any) */}
+                {/* Secondary Screenshots */}
                 {project.gallery && (
                     <div className="grid grid-cols-2 gap-4">
                         {project.gallery.map((img, idx) => (
@@ -97,7 +110,7 @@ const ProjectDetail = ({ project }) => {
                 </p>
 
                 {/* Features List */}
-                <div className="space-y-4 mb-10">
+                <div className="space-y-4 mb-8">
                     <h3 className="text-sm font-mono text-gray-500 uppercase tracking-wider">Fonctionnalités Clés</h3>
                     <ul className="space-y-3">
                         {project.features?.map(feat => (
@@ -110,7 +123,7 @@ const ProjectDetail = ({ project }) => {
                 </div>
 
                 {/* Tech Stack */}
-                <div className="mb-12">
+                <div className="mb-8">
                     <h3 className="text-sm font-mono text-gray-500 uppercase tracking-wider mb-3">Technologies</h3>
                     <div className="flex flex-wrap gap-2">
                         {project.tags.map(tag => (
@@ -121,7 +134,27 @@ const ProjectDetail = ({ project }) => {
                     </div>
                 </div>
 
-                {/* Call to Action (Spacer to push to bottom) */}
+                {/* Contributors Section */}
+                {project.contributors && (
+                    <div className="mb-12">
+                        <h3 className="text-sm font-mono text-gray-500 uppercase tracking-wider mb-4">Équipe / Contributeurs</h3>
+                        <div className="flex flex-wrap gap-4">
+                            {project.contributors.map((contrib, idx) => (
+                                <div key={idx} className="flex items-center gap-3 bg-white/5 px-3 py-2 rounded-lg border border-white/5">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
+                                        {contrib.name.charAt(0)}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-bold text-white leading-none">{contrib.name}</span>
+                                        <span className="text-[10px] text-gray-400 uppercase tracking-wide">{contrib.role}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Call to Action */}
                 <div className="mt-auto">
                     {project.liveUrl && (
                         <a

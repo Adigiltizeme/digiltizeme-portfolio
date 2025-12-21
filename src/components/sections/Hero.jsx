@@ -44,7 +44,7 @@ const Hero = () => {
                     >
                         Démarrer un projet <ArrowUpRight size={20} className="group-hover:rotate-45 transition-transform" />
                     </button>
-                    <a href="https://wa.me/33600000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                    <a href="https://wa.me/33616557039" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                         <MessageCircle size={20} />
                         <span>Discuter sur WhatsApp</span>
                     </a>
