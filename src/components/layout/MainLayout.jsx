@@ -19,9 +19,9 @@ const MainLayout = ({ children }) => {
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-8 pointer-events-auto bg-black/40 backdrop-blur-xl px-8 py-3 rounded-full border border-white/10">
-                    <Link to="/" className="text-sm font-bold text-gray-300 hover:text-white transition-colors">ACCUEIL</Link>
-                    <Link to="/contact" className="text-sm font-bold text-gray-300 hover:text-white transition-colors">CONTACT</Link>
-                    <Link to="/plan" className="px-5 py-2 bg-orange-500 text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-colors">
+                    <Link to="/" className="px-5 py-2 text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-colors">ACCUEIL</Link>
+                    <Link to="/contact" className="px-5 py-2 text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-colors">CONTACT</Link>
+                    <Link to="/plan" className="px-5 py-2 text-white rounded-full text-sm font-bold hover:bg-orange-600 transition-colors">
                         MON PROJET
                     </Link>
                 </div>

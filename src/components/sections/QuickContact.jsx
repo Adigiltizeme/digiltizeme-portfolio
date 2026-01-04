@@ -14,6 +14,9 @@ const QuickContact = ({ isFullPage = false }) => {
         source: '',
         goal: '',
         description: '',
+        contentReady: '', // New field
+        needHelp: '', // New field
+        pageVolume: '', // New field
         budget: '',
         deadline: ''
     });
@@ -194,6 +197,51 @@ const QuickContact = ({ isFullPage = false }) => {
                                                 value={form.goal} onChange={handleChange}
                                                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-colors placeholder:text-gray-600"
                                             />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <label className="text-xs font-bold text-gray-400 uppercase ml-1 flex items-center">
+                                            Contenu <Tooltip text="Avez-vous déjà vos textes et images ?" />
+                                        </label>
+                                        <select
+                                            name="contentReady" value={form.contentReady} onChange={handleChange}
+                                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-colors appearance-none cursor-pointer"
+                                        >
+                                            <option value="" className="bg-black text-gray-500">Contenu disponible ?</option>
+                                            <option value="yes" className="bg-black">Oui, tout est prêt</option>
+                                            <option value="partial" className="bg-black">Partiellement</option>
+                                            <option value="no" className="bg-black">Non, je pars de zéro</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-gray-400 uppercase ml-1">Besoin d'aide ?</label>
+                                            <select
+                                                name="needHelp" value={form.needHelp} onChange={handleChange}
+                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-colors appearance-none cursor-pointer"
+                                            >
+                                                <option value="" className="bg-black text-gray-500">Choisir...</option>
+                                                <option value="copy" className="bg-black">Rédaction</option>
+                                                <option value="photo" className="bg-black">Photos/Vidéo</option>
+                                                <option value="both" className="bg-black">Les deux</option>
+                                                <option value="none" className="bg-black">Aucun</option>
+                                            </select>
+                                            <FileText size={18} className="absolute left-4 bottom-3.5 text-gray-500 pointer-events-none" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-bold text-gray-400 uppercase ml-1">Pages Est.</label>
+                                            <select
+                                                name="pageVolume" value={form.pageVolume} onChange={handleChange}
+                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-colors appearance-none cursor-pointer"
+                                            >
+                                                <option value="" className="bg-black text-gray-500">Volume...</option>
+                                                <option value="<5" className="bg-black">1 à 5 pages</option>
+                                                <option value="5-10" className="bg-black">5 à 10 pages</option>
+                                                <option value="10+" className="bg-black">10+ pages</option>
+                                            </select>
+                                            <FileText size={18} className="absolute left-4 bottom-3.5 text-gray-500 pointer-events-none" />
                                         </div>
                                     </div>
 
