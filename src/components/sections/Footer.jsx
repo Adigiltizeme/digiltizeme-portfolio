@@ -1,7 +1,9 @@
 import React from 'react';
-import { Mail, MessageCircle, Phone, Calendar } from 'lucide-react';
 
-const Footer = () => {
+import { Mail, MessageCircle, Phone, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+const Footer = ({ onOpenQuestionnaire }) => {
     return (
         <footer id="contact" className="relative bg-urban-gray border-t border-white/10 py-24 px-6 overflow-hidden">
             {/* Glow effect */}
@@ -36,7 +38,16 @@ const Footer = () => {
                     </a>
                 </div>
 
-                <div className="mt-24 text-gray-600 text-sm">
+                <div className="mt-12">
+                    <Link
+                        to="/plan"
+                        className="text-gray-400 hover:text-white underline decoration-gray-600 underline-offset-4 transition-colors text-sm"
+                    >
+                        J'ai déjà un RDV ? Remplir le questionnaire détaillé
+                    </Link>
+                </div>
+
+                <div className="mt-12 text-gray-600 text-sm">
                     © {new Date().getFullYear()} Digiltizème. Tous droits réservés.
                 </div>
             </div>

@@ -1,25 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
-import Hero from './components/sections/Hero';
-import BentoGrid from './components/sections/BentoGrid';
-import Services from './components/sections/Services';
-import QuoteSimulator from './components/sections/QuoteSimulator';
-import Methodology from './components/sections/Methodology';
-import Footer from './components/sections/Footer';
-import FinancingModal from './components/ui/FinancingModal';
+import HomePage from './pages/HomePage';
+import ContactPage from './pages/ContactPage';
+import QuestionnairePage from './pages/QuestionnairePage';
+
+// ScrollToTop component to reset scroll on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function App() {
-  const [isFinancingOpen, setIsFinancingOpen] = useState(false);
-
   return (
     <MainLayout>
-      <Hero />
-      <BentoGrid />
-      <Services />
-      <QuoteSimulator />
-      <Methodology onOpenFinancing={() => setIsFinancingOpen(true)} />
-      <Footer />
-      <FinancingModal isOpen={isFinancingOpen} onClose={() => setIsFinancingOpen(false)} />
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/plan" element={<QuestionnairePage />} />
+      </Routes>
     </MainLayout>
   )
 }

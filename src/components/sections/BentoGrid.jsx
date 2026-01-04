@@ -6,10 +6,10 @@ import ProjectDetail from './ProjectDetail';
 const projects = [
     {
         name: "My Truck Transport",
-        category: "Desktop App & SaaS",
+        category: "Desktop / Web / Mobile Apps & SaaS",
         color: "from-orange-500 to-red-600",
         description: "Solution complète de gestion logistique utilisée en production. Dashboard Admin puissant, Communication temps réel et Suivi de flotte.",
-        tags: ["Electron", "NestJS", "Mapbox", "WebSocket"],
+        tags: ["Electron", "React/NestJS", "PostGreSQL", "Real-time Messaging & Tracking", "Mapbox", "WebSocket"],
         features: [
             "Dashboard Admin Temps Réel (Vue Satellite)",
             "Messagerie instantanée Chauffeur <-> Admin",
@@ -28,10 +28,10 @@ const projects = [
     },
     {
         name: "O'Boricienne Burgers",
-        category: "Mobile App & FoodTech",
+        category: "Web / Mobile Apps & FoodTech",
         color: "from-yellow-400 to-orange-600",
         description: "L'expérience de commande ultime. 3 clics pour manger, un programme de fidélité addictif et une identité de marque forte.",
-        tags: ["Mobile Native", "PWA", "Real-time Tracking", "Gamification"],
+        tags: ["NextJS", "PWA", "Gamification"],
         features: [
             "Commande ultra-rapide en 3 étapes",
             "Programme fidélité 'Adventure' (Badges & Niveaux)",
@@ -45,16 +45,16 @@ const projects = [
     },
     {
         name: "CheckAll Eat",
-        category: "FoodTech & Delivery",
+        category: "Mobile App / FoodTech & Delivery",
         color: "from-emerald-400 to-cyan-500",
         description: "L'avenir de la livraison avec suivi live.",
-        tags: ["Mobile App", "Geolocation", "UX/UI"],
+        tags: ["React Native", "Geolocation", "UX/UI"],
         features: [
             "Géolocalisation haute précision",
             "Algorithme de matching livreur/resto",
             "Paiement in-app sécurisé"
         ],
-        className: "md:col-span-12",
+        className: "md:col-span-6",
         image: "/projects/checkalleat.png"
     },
     {
@@ -69,15 +69,15 @@ const projects = [
             "Système de notation et avis",
             "Authentification sécurisée (JWT)"
         ],
-        className: "md:col-span-12",
+        className: "md:col-span-6",
         video: "/projects/finded_demo.mp4",
         contributors: [
             { name: "Benjamin D'ONOFRIO", role: "Dev Fullstack" },
             { name: "Santiago TONOLI", role: "Dev Frontend" },
-            { name: "Hadama SAMASSA", role: "Dev Backend" },
+            { name: "Hadama SAMASSA", role: "Dev Fullstack" },
             { name: "Léo BACCIALONE", role: "Lead Dev / Dev Fullstack" }
         ],
-        image: "/projects/finded_preview.png" // Fallback or thumbnail if needed, sticking to video primarily
+        image: "/projects/finded_preview.png"
     }
 ];
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
     return (
@@ -38,12 +39,12 @@ const Hero = () => {
                 </p>
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-                    <button
-                        onClick={() => document.getElementById('simulator').scrollIntoView({ behavior: 'smooth' })}
+                    <Link
+                        to="/contact"
                         className="px-8 py-4 bg-white text-black font-bold rounded-xl flex items-center gap-2 hover:bg-orange-500 hover:text-white transition-all duration-300 group shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(249,115,22,0.4)]"
                     >
                         Démarrer un projet <ArrowUpRight size={20} className="group-hover:rotate-45 transition-transform" />
-                    </button>
+                    </Link>
                     <a href="https://wa.me/33616557039" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                         <MessageCircle size={20} />
                         <span>Discuter sur WhatsApp</span>

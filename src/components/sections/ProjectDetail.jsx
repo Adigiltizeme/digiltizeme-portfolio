@@ -47,14 +47,14 @@ const ProjectDetail = ({ project }) => {
             <div className="lg:w-7/12 bg-black/30 p-8 flex flex-col gap-6">
                 {/* Main Media (Video or Image) */}
                 <div
-                    className="rounded-2xl overflow-hidden border border-white/5 shadow-lg relative group"
+                    className="rounded-2xl overflow-hidden border border-white/5 shadow-lg relative group flex items-center justify-center bg-black/40 min-h-[300px]"
                     onClick={() => !project.video && setSelectedImage(project.image)} // Only zoom if image
                 >
                     {project.video ? (
                         <video
                             src={project.video}
                             controls
-                            className="w-full h-auto object-cover"
+                            className="max-w-full max-h-[500px] w-auto h-auto object-contain mx-auto rounded-lg"
                             loop
                             muted
                             autoPlay
@@ -64,7 +64,7 @@ const ProjectDetail = ({ project }) => {
                             <img
                                 src={project.image}
                                 alt={project.name}
-                                className="w-full h-auto object-cover cursor-zoom-in"
+                                className="max-w-full max-h-[500px] w-auto h-auto object-contain mx-auto cursor-zoom-in"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                 <span className="px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold flex items-center gap-2 border border-white/10">
