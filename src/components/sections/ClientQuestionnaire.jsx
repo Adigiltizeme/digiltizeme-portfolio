@@ -8,10 +8,19 @@ import { submitLead, downloadSummary } from '../utils/formHandler';
 // Comprehensive Educational Tooltips for ALL fields
 const SECTIONS = [
     {
+        id: 0,
+        title: "Identité",
+        questions: [
+            { key: "Nom", tooltip: "Votre nom complet." },
+            { key: "Nom_entreprise", tooltip: "Le nom officiel de votre structure (Société, Marque, ou Projet)." },
+            { key: "Email", tooltip: "Votre adresse email professionnelle." },
+            { key: "Téléphone", tooltip: "Un numéro pour vous joindre." }
+        ]
+    },
+    {
         id: 1,
         title: "L'Activité",
         questions: [
-            { key: "Nom_entreprise", tooltip: "Le nom officiel de votre structure (Société, Marque, ou Projet)." },
             { key: "Secteur", tooltip: "Votre domaine d'activité principal (ex: BTP, Restauration, E-commerce, Santé...)." },
             { key: "Taille", tooltip: "Nombre de personnes dans l'entreprise. Cela nous aide à dimensionner les outils de gestion." },
             { key: "Anciennete", tooltip: "Depuis quand existez-vous ? Une startup a des besoins différents d'une PME établie." }
@@ -174,7 +183,10 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
             <motion.div
                 initial={isFullPage ? { opacity: 0, y: 20 } : { opacity: 0, scale: 0.95 }}
                 animate={isFullPage ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1 }}
-                className={`relative bg-urban-black border border-white/10 w-full max-w-4xl ${isFullPage ? 'min-h-[70vh] rounded-3xl' : 'h-[90vh] rounded-3xl'} overflow-hidden flex flex-col shadow-2xl`}
+                className={`relative bg-urban-black border border-white/10 w-full max-w-4xl rounded-3xl overflow-hidden flex flex-col shadow-2xl
+                    ${isFullPage ? 'min-h-[50vh]' : 'h-[90vh] md:h-auto md:max-h-[90vh]'}
+                `}
+                style={{ maxHeight: isFullPage ? 'none' : '90dvh' }} // Use dynamic viewport height
             >
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b border-white/5 bg-white/5">

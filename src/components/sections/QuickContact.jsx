@@ -86,8 +86,9 @@ const QuickContact = ({ isFullPage = false }) => {
 
                 <div className="bg-urban-gray/30 border border-white/10 rounded-3xl p-8 md:p-12 backdrop-blur-xl relative overflow-hidden">
                     {/* Decorative Gradients */}
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none" />
-                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] pointer-events-none" />
+                    {/* Decorative Gradients - z-0 to ensure they stay behind */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none z-0" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] pointer-events-none z-0" />
 
                     <form onSubmit={handleSubmit} className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* Column 1: Identity & Coords */}
@@ -247,7 +248,7 @@ const QuickContact = ({ isFullPage = false }) => {
 
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-gray-400 uppercase ml-1 flex items-center">
-                                            Description rapide <Tooltip text="Dites-nous en quelques mots ce que vous voulez réaliser." />
+                                            Description détaillée <Tooltip text="Dites-nous en quelques mots ce que vous voulez réaliser." />
                                         </label>
                                         <div className="relative">
                                             <FileText size={18} className="absolute left-4 top-3.5 text-gray-500" />

@@ -63,6 +63,21 @@ export const submitLead = async (formType, data) => {
             },
             EMAILJS_CONFIG.PUBLIC_KEY
         );
+
+        // 🚀 NEW: Send to NestJS Backend (Database)
+        // We do this in parallel or after EmailJS
+        try {
+            await fetch('http://localhost:3000/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            console.log("✅ Lead saved to NestJS Database");
+        } catch (dbError) {
+            console.error("⚠️ Failed to save to Database:", dbError);
+            // We don't throw here to ensure the user still gets the success message if email worked
+        }
+
         return response;
     } catch (error) {
         console.error("❌ EmailJS Error:", error);
