@@ -39,45 +39,48 @@ export const submitLead = async (formType, data) => {
     const formattedMessage = formatFormData(data, formType === 'contact' ? 'Contact Rapide' : 'Questionnaire Detaillé');
 
     console.log("🚀 [Simulation] Sending Data to Digiltizème:", data);
-    console.log("📄 [Formatted Message]: \n", formattedMessage);
 
-    // If config is missing, return success simulation to avoid breaking UI demo
-    if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
+    // 1. 🚀 Send to NestJS Backend (First Priority)
+    try {
+        const response = await fetch('http://localhost:4000/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`⚠️ Backend returned ${response.status}:`, errorText);
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const savedLead = await response.json();
+        console.log("✅ Lead saved to NestJS Database:", savedLead.id);
+    } catch (dbError) {
+        console.error("⚠️ Failed to save to Database:", dbError);
+        throw dbError; // Re-throw to show error to user
+    }
+
+    // 2. EmailJS (Secondary / Notification)
+    // If config is missing, return success simulation
+    if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY' || !EMAILJS_CONFIG.PUBLIC_KEY) {
         console.warn("⚠️ EmailJS not configured. Submitting in 'Simulation Mode'.");
-        return new Promise(resolve => setTimeout(() => resolve({ status: 'simulated' }), 1500));
+        return new Promise(resolve => setTimeout(() => resolve({ status: 'simulated' }), 1000));
     }
 
     try {
-        // Use EmailJS to send data
-        // Note: You need to define template params in EmailJS dashboard like {{name}}, {{message}}, etc.
-        // We typically pass a generic 'message' param containing the formatted text
         const response = await emailjs.send(
             EMAILJS_CONFIG.SERVICE_ID,
             templateId,
             {
                 ...data, // Pass individual fields
                 full_summary: formattedMessage, // Pass the formatted block
-                to_name: "Adama",
+                to_name: "Admin",
                 from_name: data.name || "Prospect",
                 reply_to: data.email
             },
             EMAILJS_CONFIG.PUBLIC_KEY
         );
-
-        // 🚀 NEW: Send to NestJS Backend (Database)
-        // We do this in parallel or after EmailJS
-        try {
-            await fetch('http://localhost:3000/leads', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            console.log("✅ Lead saved to NestJS Database");
-        } catch (dbError) {
-            console.error("⚠️ Failed to save to Database:", dbError);
-            // We don't throw here to ensure the user still gets the success message if email worked
-        }
-
         return response;
     } catch (error) {
         console.error("❌ EmailJS Error:", error);

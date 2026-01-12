@@ -170,7 +170,7 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
             setIsSuccess(true);
         } catch (error) {
             console.error("Submission error", error);
-            // Handle error UI if needed
+            alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);
         }
@@ -307,12 +307,12 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
 
                         <button
                             onClick={handleNext}
-                            className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-orange-500 hover:text-white transition-all flex items-center gap-2 group"
+                            className="px-8 py-3 bg-white text-black font-bold rounded-xl active:bg-gray-200 hover:bg-orange-500 hover:text-white transition-all flex items-center gap-2 min-h-[50px]"
                         >
                             {currentSection === SECTIONS.length - 1 ? (
                                 isSubmitting ? 'Envoi...' : <>Terminer <Send size={18} /></>
                             ) : (
-                                <>Suivant <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" /></>
+                                <>Suivant <ChevronRight size={20} /></>
                             )}
                         </button>
                     </div>

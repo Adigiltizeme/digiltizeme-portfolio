@@ -22,18 +22,30 @@ const QuickContact = ({ isFullPage = false }) => {
     });
     const [status, setStatus] = useState('idle'); // idle, submitting, success
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setStatus('submitting');
+    const validateForm = () => {
+        const required = ['name', 'company', 'email', 'phone', 'projectType'];
+        const missing = required.filter(field => !form[field]);
+        if (missing.length > 0) {
+            alert(`Merci de remplir les champs obligatoires : ${missing.join(', ')}`);
+            return false;
+        }
+        return true;
+    };
 
+    const handleManualSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        setStatus('submitting');
         try {
             await submitLead('contact', form);
             setStatus('success');
             // Auto-download summary for the user
-            // downloadSummary(form, `Demande_Contact_${form.name.replace(/\s+/g, '_')}.txt`);
+            downloadSummary(form, `Demande_Contact_${form.name.replace(/\s+/g, '_')}.txt`);
         } catch (error) {
             console.error("Submission failed", error);
-            setStatus('error'); // You might want to handle error state visibly
+            setStatus('error');
+            alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
         }
     };
 
@@ -90,7 +102,7 @@ const QuickContact = ({ isFullPage = false }) => {
                     <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[80px] pointer-events-none z-0" />
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] pointer-events-none z-0" />
 
-                    <form onSubmit={handleSubmit} className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <form onSubmit={handleManualSubmit} className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
                         {/* Column 1: Identity & Coords */}
                         <div className="space-y-8">
                             <div>
@@ -303,7 +315,8 @@ const QuickContact = ({ isFullPage = false }) => {
                         {/* Submit */}
                         <div className="md:col-span-2 pt-4 flex flex-col items-center">
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={handleManualSubmit}
                                 disabled={status === 'submitting'}
                                 className="w-full md:w-auto px-12 py-4 bg-white text-black font-black text-lg rounded-xl hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(249,115,22,0.4)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
                             >
