@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LogOut, LayoutDashboard, Users, TrendingUp, Search } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
 
@@ -75,6 +75,10 @@ const DashboardPage = () => {
                         <Users className="w-5 h-5" />
                         CRM Leads
                     </a>
+                    <Link to="/admin/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                        <User className="w-5 h-5" />
+                        Mon Profil
+                    </Link>
                 </div>
 
                 <div className="absolute bottom-8 left-6 w-[calc(100%-48px)]">
@@ -95,9 +99,12 @@ const DashboardPage = () => {
                         <p className="text-white/40 mt-1">Welcome back, Admin</p>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center text-primary-400 font-bold">
+                        <Link
+                            to="/admin/profile"
+                            className="w-10 h-10 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center text-primary-400 font-bold hover:bg-primary-500/30 transition-colors"
+                        >
                             A
-                        </div>
+                        </Link>
                     </div>
                 </header>
 
