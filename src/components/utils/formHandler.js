@@ -40,9 +40,12 @@ export const submitLead = async (formType, data) => {
 
     console.log("🚀 [Simulation] Sending Data to Digiltizème:", data);
 
+    // Get API URL from environment or default to localhost
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
     // 1. 🚀 Send to NestJS Backend (First Priority)
     try {
-        const response = await fetch('http://localhost:4000/leads', {
+        const response = await fetch(`${API_URL}/leads`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

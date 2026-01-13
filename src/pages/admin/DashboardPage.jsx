@@ -18,9 +18,10 @@ const DashboardPage = () => {
     const fetchLeads = async () => {
         try {
             const token = localStorage.getItem('adminToken');
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
             console.log('🔐 Fetching leads with token:', token ? 'Present' : 'Missing');
 
-            const response = await fetch('http://localhost:4000/leads', {
+            const response = await fetch(`${API_URL}/leads`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
