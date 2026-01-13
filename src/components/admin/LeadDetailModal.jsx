@@ -1,10 +1,15 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Phone, Calendar, Building, FileText, Globe, Target, DollarSign } from 'lucide-react';
+import { X, Mail, Phone, Calendar, Building, FileText, Globe, Target, DollarSign, Share2 } from 'lucide-react';
+import { downloadMarkmap } from '../utils/markmapExporter';
 
 const LeadDetailModal = ({ lead, onClose }) => {
     if (!lead) return null;
+
+    const handleExportMindMap = () => {
+        downloadMarkmap(lead);
+    };
 
     return (
         <AnimatePresence>
@@ -99,13 +104,23 @@ const LeadDetailModal = ({ lead, onClose }) => {
                     </div>
 
                     {/* Footer Actions */}
-                    <div className="p-6 border-t border-white/10 bg-white/5 flex gap-4 justify-end">
+                    <div className="p-6 border-t border-white/10 bg-white/5 flex flex-wrap gap-4 justify-end">
                         <button
                             onClick={onClose}
                             className="px-6 py-2.5 rounded-xl font-medium text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                         >
                             Fermer
                         </button>
+
+                        <button
+                            onClick={handleExportMindMap}
+                            className="px-6 py-2.5 rounded-xl font-bold bg-white/5 border border-white/10 hover:bg-white/10 text-white transition-all flex items-center gap-2 group"
+                            title="Télécharger le fichier .md pour Markmap"
+                        >
+                            <Share2 size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
+                            Générer Mind Map
+                        </button>
+
                         <a
                             href={`mailto:${lead.email}?subject=Re: Votre projet ${lead.company || ''} - Digiltizème`}
                             className="px-6 py-2.5 rounded-xl font-bold bg-primary-600 hover:bg-primary-500 text-white shadow-lg shadow-primary-600/20 transition-all flex items-center gap-2"
