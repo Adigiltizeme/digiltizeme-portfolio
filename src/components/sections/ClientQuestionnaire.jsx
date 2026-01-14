@@ -146,9 +146,20 @@ const SECTIONS = [
 
 const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
     const [currentSection, setCurrentSection] = useState(0);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState(() => {
+        // Load from localStorage on initialization
+        const saved = localStorage.getItem('digiltizeme_draft_questionnaire');
+        return saved ? JSON.parse(saved) : {};
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    // Save to localStorage whenever formData changes
+    React.useEffect(() => {
+        if (Object.keys(formData).length > 0) {
+            localStorage.setItem('digiltizeme_draft_questionnaire', JSON.stringify(formData));
+        }
+    }, [formData]);
 
     const handleNext = () => {
         if (currentSection < SECTIONS.length - 1) setCurrentSection(prev => prev + 1);
@@ -166,11 +177,33 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            await submitLead('plan', formData);
+            // MAP DATA TO BACKEND DTO
+            // The backend expects specific names, but the questionnaire uses French keys
+            const mappedData = {
+                name: formData.Nom || '',
+                company: formData.Nom_entreprise || '',
+                email: formData.Email || '',
+                phone: formData.Téléphone || '',
+                projectType: formData.Type_solution || 'vitrine',
+                goal: formData.Objectifs_principaux || '',
+                description: formData.Vision || formData.Origine_projet || '',
+                contentReady: formData.Contenu_dispo || '',
+                needHelp: formData.Besoin_aide || '',
+                pageVolume: formData.Volume_pages || '',
+                budget: formData.Budget_range || '',
+                deadline: formData.Delai || '',
+                // Pass EVERYTHING else into the 'details' JSON field
+                details: { ...formData }
+            };
+
+            await submitLead('plan', mappedData);
+
+            // Success! Clear the draft
+            localStorage.removeItem('digiltizeme_draft_questionnaire');
             setIsSuccess(true);
         } catch (error) {
             console.error("Submission error", error);
-            alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+            alert("Une erreur est survenue lors de l'envoi. Veuillez vérifier votre connexion et réessayer. Vos données ont été sauvegardées localement.");
         } finally {
             setIsSubmitting(false);
         }
