@@ -12,17 +12,29 @@ const EMAILJS_CONFIG = {
 
 /**
  * Formats the form data into a readable string for emails/logs
+ * Handles nested objects (like 'details') recursively
  */
-export const formatFormData = (data, title = "Nouveau Lead") => {
-    let formattedText = `=== ${title} ===\n\n`;
-    const date = new Date().toLocaleString("fr-FR");
-    formattedText += `Date: ${date}\n`;
+export const formatFormData = (data, title = "Nouveau Lead", indent = "") => {
+    let formattedText = indent === "" ? `=== ${title} ===\n\nDate: ${new Date().toLocaleString("fr-FR")}\n` : "";
 
-    // Group fields if possible or list them
     for (const [key, value] of Object.entries(data)) {
-        // Capitalize key and replace underscores
+        if (value === null || value === undefined) continue;
+
+        // Skip keys that are duplicates of what's in 'details' to avoid redundancy
+        if (indent === "" && key === "details") {
+            formattedText += `\n--- DÉTAILS DU QUESTIONNAIRE ---\n`;
+            formattedText += formatFormData(value, "", "  ");
+            continue;
+        }
+
         const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-        formattedText += `${label}: ${value}\n`;
+
+        if (typeof value === 'object' && !Array.isArray(value)) {
+            formattedText += `${indent}${label}:\n`;
+            formattedText += formatFormData(value, "", indent + "  ");
+        } else {
+            formattedText += `${indent}${label}: ${value}\n`;
+        }
     }
 
     return formattedText;
@@ -71,17 +83,21 @@ export const submitLead = async (formType, data) => {
         return new Promise(resolve => setTimeout(() => resolve({ status: 'simulated' }), 1000));
     }
 
+    // Flatten details for EmailJS template if it exists
+    const emailData = {
+        ...data,
+        ...(data.details || {}), // Spread details into top level for template access
+        full_summary: formattedMessage,
+        to_name: "Admin",
+        from_name: data.name || "Prospect",
+        reply_to: data.email
+    };
+
     try {
         const response = await emailjs.send(
             EMAILJS_CONFIG.SERVICE_ID,
             templateId,
-            {
-                ...data, // Pass individual fields
-                full_summary: formattedMessage, // Pass the formatted block
-                to_name: "Admin",
-                from_name: data.name || "Prospect",
-                reply_to: data.email
-            },
+            emailData,
             EMAILJS_CONFIG.PUBLIC_KEY
         );
         return response;

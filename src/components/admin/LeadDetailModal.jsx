@@ -97,6 +97,27 @@ const LeadDetailModal = ({ lead, onClose }) => {
                             </div>
                         </section>
 
+                        {/* Full Questionnaire Data */}
+                        {lead.details && Object.keys(lead.details).length > 0 && (
+                            <section>
+                                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                    <FileText size={18} className="text-orange-500" /> Questionnaire complet
+                                </h3>
+                                <div className="grid grid-cols-1 gap-3">
+                                    {Object.entries(lead.details).map(([key, value]) => {
+                                        if (!value || typeof value === 'object') return null;
+                                        const label = key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+                                        return (
+                                            <div key={key} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                                                <div className="text-xs text-white/40 mb-1 uppercase tracking-wider font-bold">{label}</div>
+                                                <div className="text-white/90 whitespace-pre-wrap">{value}</div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        )}
+
                         {/* Metadata */}
                         <div className="text-xs text-white/20 text-center pt-4 border-t border-white/5">
                             ID: {lead.id} • Créé le {new Date(lead.createdAt).toLocaleString()}
