@@ -145,7 +145,10 @@ const SECTIONS = [
 ];
 
 const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
-    const [currentSection, setCurrentSection] = useState(0);
+    const [currentSection, setCurrentSection] = useState(() => {
+        const saved = localStorage.getItem('digiltizeme_draft_section');
+        return saved ? parseInt(saved, 10) : 0;
+    });
     const [formData, setFormData] = useState(() => {
         // Load from localStorage on initialization
         const saved = localStorage.getItem('digiltizeme_draft_questionnaire');
@@ -154,12 +157,17 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    // Save to localStorage whenever formData changes
+    // Save data to localStorage
     React.useEffect(() => {
         if (Object.keys(formData).length > 0) {
             localStorage.setItem('digiltizeme_draft_questionnaire', JSON.stringify(formData));
         }
     }, [formData]);
+
+    // Save current section to localStorage
+    React.useEffect(() => {
+        localStorage.setItem('digiltizeme_draft_section', currentSection.toString());
+    }, [currentSection]);
 
     const handleNext = () => {
         if (currentSection < SECTIONS.length - 1) setCurrentSection(prev => prev + 1);
