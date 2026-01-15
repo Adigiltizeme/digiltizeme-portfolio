@@ -29,6 +29,14 @@ const ProfilePage = () => {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
+            if (response.status === 401 || response.status === 404) {
+                console.warn('⚠️ Session invalide. Redirection vers login...');
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                navigate('/admin/login');
+                return;
+            }
+
             if (response.ok) {
                 const data = await response.json();
                 setUser(data);
