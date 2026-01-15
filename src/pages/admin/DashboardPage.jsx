@@ -19,9 +19,14 @@ const DashboardPage = () => {
         try {
             const token = localStorage.getItem('adminToken');
 
-            // Priority: URL from env > window origin port 4000 > default localhost:4000
-            const API_URL = import.meta.env.VITE_API_URL ||
-                (window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://backend-portfolio-production-871c.up.railway.app');
+            // Priority: URL from env (if valid) > window origin port 4000 > default localhost:4000
+            let API_URL = import.meta.env.VITE_API_URL || '';
+
+            if (!API_URL || API_URL.includes('5173') || API_URL === '/') {
+                API_URL = window.location.hostname === 'localhost'
+                    ? 'http://localhost:4000'
+                    : 'https://backend-portfolio-production-871c.up.railway.app';
+            }
 
             console.log('🔐 Fetching leads with token:', token ? 'Present' : 'Missing');
 

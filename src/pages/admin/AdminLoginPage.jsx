@@ -18,8 +18,15 @@ const AdminLoginPage = () => {
 
         try {
             // Priority: URL from env > window origin port 4000 > default localhost:4000
-            const API_URL = import.meta.env.VITE_API_URL ||
-                (window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://backend-portfolio-production-871c.up.railway.app');
+            // Priority: URL from env (if valid) > window origin port 4000 > default localhost:4000
+            let API_URL = import.meta.env.VITE_API_URL || '';
+
+            // Defensive fix: If VITE_API_URL accidentally points to the frontend (5173), override it
+            if (!API_URL || API_URL.includes('5173') || API_URL === '/') {
+                API_URL = window.location.hostname === 'localhost'
+                    ? 'http://localhost:4000'
+                    : 'https://backend-portfolio-production-871c.up.railway.app';
+            }
 
             console.log(`🔐 Attempting login at: ${API_URL}/auth/login`);
 
