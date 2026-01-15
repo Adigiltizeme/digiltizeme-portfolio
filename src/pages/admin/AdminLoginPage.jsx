@@ -17,7 +17,12 @@ const AdminLoginPage = () => {
         setError(null);
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            // Priority: URL from env > window origin port 4000 > default localhost:4000
+            const API_URL = import.meta.env.VITE_API_URL ||
+                (window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://backend-portfolio-production-871c.up.railway.app');
+
+            console.log(`🔐 Attempting login at: ${API_URL}/auth/login`);
+
             const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -25,7 +30,8 @@ const AdminLoginPage = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Invalid credentials');
+                const errorData = await response.json().catch(() => ({ message: 'Invalid credentials' }));
+                throw new Error(errorData.message || 'Invalid credentials');
             }
 
             const data = await response.json();
@@ -34,6 +40,7 @@ const AdminLoginPage = () => {
             navigate('/admin/dashboard');
 
         } catch (err) {
+            console.error('❌ Login error:', err);
             setError(err.message || 'Login failed');
         } finally {
             setIsLoading(false);

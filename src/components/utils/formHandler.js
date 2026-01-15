@@ -52,8 +52,9 @@ export const submitLead = async (formType, data) => {
 
     console.log("🚀 [Simulation] Sending Data to Digiltizème:", data);
 
-    // Get API URL from environment or default to localhost
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    // Priority: URL from env > window origin port 4000 > default localhost:4000
+    const API_URL = import.meta.env.VITE_API_URL ||
+        (window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://backend-portfolio-production-871c.up.railway.app');
 
     // 1. 🚀 Send to NestJS Backend (First Priority)
     try {

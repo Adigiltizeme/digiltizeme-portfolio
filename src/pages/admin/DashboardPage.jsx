@@ -18,7 +18,11 @@ const DashboardPage = () => {
     const fetchLeads = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+            // Priority: URL from env > window origin port 4000 > default localhost:4000
+            const API_URL = import.meta.env.VITE_API_URL ||
+                (window.location.hostname === 'localhost' ? 'http://localhost:4000' : 'https://backend-portfolio-production-871c.up.railway.app');
+
             console.log('🔐 Fetching leads with token:', token ? 'Present' : 'Missing');
 
             const response = await fetch(`${API_URL}/leads`, {
@@ -27,15 +31,20 @@ const DashboardPage = () => {
                 }
             });
 
-            console.log('📡 GET /leads response status:', response.status);
+            console.log(`📡 GET ${API_URL}/leads response status:`, response.status);
+
+            if (response.status === 401) {
+                console.warn('⚠️ Token expired or invalid. Redirecting to login...');
+                handleLogout();
+                return;
+            }
 
             if (response.ok) {
                 const data = await response.json();
                 console.log('✅ Leads fetched:', data.length, 'leads');
                 setLeads(data);
-                // Calculate stats
                 const newLeads = data.filter(l => l.status === 'NOUVEAU').length;
-                setStats({ total: data.length, new: newLeads, potential: data.length * 1500 }); // Dummy potential revenue
+                setStats({ total: data.length, new: newLeads, potential: data.length * 1500 });
             } else {
                 const errorText = await response.text();
                 console.error('❌ Failed to fetch leads:', response.status, errorText);
