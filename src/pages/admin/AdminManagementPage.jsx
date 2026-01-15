@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getApiUrl } from '../../components/utils/formHandler';
+import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const AdminManagementPage = () => {
     const navigate = useNavigate();
@@ -121,38 +122,7 @@ const AdminManagementPage = () => {
 
     return (
         <div className="min-h-screen bg-black text-white font-sans selection:bg-primary-500/30">
-            {/* Sidebar (Shared Component Style) */}
-            <nav className="fixed top-0 left-0 w-64 h-full border-r border-white/10 bg-black/50 backdrop-blur-xl p-6 hidden lg:block z-40">
-                <div className="flex items-center gap-3 mb-12">
-                    <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center font-bold">D</div>
-                    <span className="font-bold text-lg">Digiltizème<span className="text-primary-500">.</span></span>
-                </div>
-
-                <div className="space-y-2">
-                    <Link to="/admin/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <LayoutDashboard className="w-5 h-5" />
-                        Dashboard
-                    </Link>
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <Users className="w-5 h-5" />
-                        CRM Leads
-                    </a>
-                    <Link to="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-medium">
-                        <Shield className="w-5 h-5 text-primary-400" />
-                        Gestion Admins
-                    </Link>
-                    <Link to="/admin/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <User className="w-5 h-5" />
-                        Mon Profil
-                    </Link>
-                </div>
-
-                <div className="absolute bottom-8 left-6 w-[calc(100%-48px)]">
-                    <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-400 hover:bg-red-500/10 transition-colors text-sm font-medium">
-                        <LogOut className="w-4 h-4" /> Logout
-                    </button>
-                </div>
-            </nav>
+            <AdminSidebar />
 
             <main className="lg:ml-64 p-8 relative z-0">
                 <header className="flex justify-between items-center mb-10">

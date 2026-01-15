@@ -5,12 +5,14 @@ import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield } from
 import { motion } from 'framer-motion';
 import { getApiUrl } from '../../components/utils/formHandler';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
+import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
     const [leads, setLeads] = useState([]);
     const [stats, setStats] = useState({ total: 0, new: 0, potential: 0 });
     const [selectedLead, setSelectedLead] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchLeads();
@@ -101,6 +103,12 @@ const DashboardPage = () => {
         navigate('/admin/login');
     };
 
+    const filteredLeads = leads.filter(lead =>
+        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (lead.company && lead.company.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+
     return (
         <div className="min-h-screen bg-black text-white font-sans selection:bg-primary-500/30">
             {/* Background Ambience */}
@@ -109,42 +117,8 @@ const DashboardPage = () => {
             {/* Modal */}
             <LeadDetailModal lead={selectedLead} onClose={() => setSelectedLead(null)} />
 
-            {/* Sidebar/Navigation (Simplified for now) */}
-            <nav className="fixed top-0 left-0 w-64 h-full border-r border-white/10 bg-black/50 backdrop-blur-xl p-6 hidden lg:block z-40">
-                <div className="flex items-center gap-3 mb-12">
-                    <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center font-bold">D</div>
-                    <span className="font-bold text-lg">Digiltizème<span className="text-primary-500">.</span></span>
-                </div>
-
-                <div className="space-y-2">
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/10 text-white font-medium">
-                        <LayoutDashboard className="w-5 h-5 text-primary-400" />
-                        Dashboard
-                    </a>
-                    <a href="#" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <Users className="w-5 h-5" />
-                        CRM Leads
-                    </a>
-                    <Link to="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <Shield className="w-5 h-5 text-primary-400" />
-                        Gestion Admins
-                    </Link>
-                    <Link to="/admin/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
-                        <User className="w-5 h-5" />
-                        Mon Profil
-                    </Link>
-                </div>
-
-                <div className="absolute bottom-8 left-6 w-[calc(100%-48px)]">
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-red-400 hover:bg-red-500/10 transition-colors text-sm font-medium"
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                    </button>
-                </div>
-            </nav>
+            {/* Sidebar Navigation */}
+            <AdminSidebar />
 
             <main className="lg:ml-64 p-8 relative z-0">
                 <header className="flex justify-between items-center mb-10">
@@ -175,7 +149,13 @@ const DashboardPage = () => {
                         <h2 className="text-xl font-bold">Recent Leads</h2>
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                            <input type="text" placeholder="Search..." className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20" />
+                            <input
+                                type="text"
+                                placeholder="Rechercher un prospect..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20"
+                            />
                         </div>
                     </div>
 
@@ -192,12 +172,12 @@ const DashboardPage = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-white/5">
-                                {leads.length === 0 ? (
+                                {filteredLeads.length === 0 ? (
                                     <tr>
-                                        <td colSpan="6" className="px-6 py-12 text-center text-white/40">No leads found yet.</td>
+                                        <td colSpan="6" className="px-6 py-12 text-center text-white/40">Aucun prospect trouvé.</td>
                                     </tr>
                                 ) : (
-                                    leads.map((lead) => (
+                                    filteredLeads.map((lead) => (
                                         <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors">
                                             <td className="px-6 py-4">
                                                 <div className="font-medium">{lead.name}</div>
