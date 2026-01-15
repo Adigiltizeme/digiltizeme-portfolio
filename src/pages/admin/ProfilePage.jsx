@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Lock, Save, ArrowLeft, Loader2, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '../../components/utils/formHandler';
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const API_URL = getApiUrl();
 
             const response = await fetch(`${API_URL}/users/me`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -50,7 +51,7 @@ const ProfilePage = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('adminToken');
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const API_URL = getApiUrl();
 
             const updatePayload = { email: formData.email };
             if (formData.password) updatePayload.password = formData.password;
@@ -84,7 +85,7 @@ const ProfilePage = () => {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+            const API_URL = getApiUrl();
 
             const response = await fetch(`${API_URL}/users/me`, {
                 method: 'DELETE',

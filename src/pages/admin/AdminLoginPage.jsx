@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, Mail, Loader2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getApiUrl } from '../../components/utils/formHandler';
 
 const AdminLoginPage = () => {
     const navigate = useNavigate();
@@ -17,17 +18,7 @@ const AdminLoginPage = () => {
         setError(null);
 
         try {
-            // Priority: URL from env > window origin port 4000 > default localhost:4000
-            // Priority: URL from env (if valid) > window origin port 4000 > default localhost:4000
-            let API_URL = import.meta.env.VITE_API_URL || '';
-
-            // Defensive fix: If VITE_API_URL accidentally points to the frontend (5173), override it
-            if (!API_URL || API_URL.includes('5173') || API_URL === '/') {
-                API_URL = window.location.hostname === 'localhost'
-                    ? 'http://localhost:4000'
-                    : 'https://backend-portfolio-production-871c.up.railway.app';
-            }
-
+            const API_URL = getApiUrl();
             console.log(`🔐 Attempting login at: ${API_URL}/auth/login`);
 
             const response = await fetch(`${API_URL}/auth/login`, {

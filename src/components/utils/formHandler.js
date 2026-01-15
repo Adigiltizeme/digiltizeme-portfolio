@@ -11,6 +11,22 @@ const EMAILJS_CONFIG = {
 };
 
 /**
+ * Robust API URL resolution
+ * Prioritizes: ENV > Correct Localhost (4000) > Production Fallback
+ */
+export const getApiUrl = () => {
+    let url = import.meta.env.VITE_API_URL || '';
+
+    // Ignore misconfigurations (like pointing to the frontend port 5173)
+    if (!url || url.includes('5173') || url === '/') {
+        return window.location.hostname === 'localhost'
+            ? 'http://localhost:4000'
+            : 'https://backend-portfolio-production-871c.up.railway.app';
+    }
+    return url;
+};
+
+/**
  * Formats the form data into a readable string for emails/logs
  * Handles nested objects (like 'details') recursively
  */
@@ -52,14 +68,7 @@ export const submitLead = async (formType, data) => {
 
     console.log("🚀 [Simulation] Sending Data to Digiltizème:", data);
 
-    // Priority: URL from env (if valid) > window origin port 4000 > default localhost:4000
-    let API_URL = import.meta.env.VITE_API_URL || '';
-
-    if (!API_URL || API_URL.includes('5173') || API_URL === '/') {
-        API_URL = window.location.hostname === 'localhost'
-            ? 'http://localhost:4000'
-            : 'https://backend-portfolio-production-871c.up.railway.app';
-    }
+    const API_URL = getApiUrl();
 
     // 1. 🚀 Send to NestJS Backend (First Priority)
     try {

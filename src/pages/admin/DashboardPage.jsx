@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getApiUrl } from '../../components/utils/formHandler';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
 
 const DashboardPage = () => {
@@ -19,14 +20,7 @@ const DashboardPage = () => {
         try {
             const token = localStorage.getItem('adminToken');
 
-            // Priority: URL from env (if valid) > window origin port 4000 > default localhost:4000
-            let API_URL = import.meta.env.VITE_API_URL || '';
-
-            if (!API_URL || API_URL.includes('5173') || API_URL === '/') {
-                API_URL = window.location.hostname === 'localhost'
-                    ? 'http://localhost:4000'
-                    : 'https://backend-portfolio-production-871c.up.railway.app';
-            }
+            const API_URL = getApiUrl();
 
             console.log('🔐 Fetching leads with token:', token ? 'Present' : 'Missing');
 
