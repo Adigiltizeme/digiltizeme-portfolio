@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getApiUrl } from '../../components/utils/formHandler';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
@@ -53,6 +53,48 @@ const DashboardPage = () => {
         }
     };
 
+    const handleUpdateStatus = async (leadId, newStatus) => {
+        try {
+            const token = localStorage.getItem('adminToken');
+            const API_URL = getApiUrl();
+
+            const response = await fetch(`${API_URL}/leads/${leadId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            if (response.ok) {
+                setLeads(prev => prev.map(l => l.id === leadId ? { ...l, status: newStatus } : l));
+            }
+        } catch (error) {
+            console.error('❌ Failed to update lead status:', error);
+        }
+    };
+
+    const handleDeleteLead = async (leadId) => {
+        if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce prospect ?')) return;
+
+        try {
+            const token = localStorage.getItem('adminToken');
+            const API_URL = getApiUrl();
+
+            const response = await fetch(`${API_URL}/leads/${leadId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                setLeads(prev => prev.filter(l => l.id !== leadId));
+            }
+        } catch (error) {
+            console.error('❌ Failed to delete lead:', error);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
@@ -83,6 +125,10 @@ const DashboardPage = () => {
                         <Users className="w-5 h-5" />
                         CRM Leads
                     </a>
+                    <Link to="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                        <Shield className="w-5 h-5 text-primary-400" />
+                        Gestion Admins
+                    </Link>
                     <Link to="/admin/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors">
                         <User className="w-5 h-5" />
                         Mon Profil
@@ -164,17 +210,26 @@ const DashboardPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <StatusBadge status={lead.status} />
+                                                <StatusBadge
+                                                    status={lead.status}
+                                                    onChange={(newStatus) => handleUpdateStatus(lead.id, newStatus)}
+                                                />
                                             </td>
                                             <td className="px-6 py-4 text-sm text-white/60">
                                                 {new Date(lead.createdAt).toLocaleDateString()}
                                             </td>
-                                            <td className="px-6 py-4">
+                                            <td className="px-6 py-4 flex items-center gap-3">
                                                 <button
                                                     onClick={() => setSelectedLead(lead)}
                                                     className="text-sm text-primary-400 hover:text-primary-300 font-medium"
                                                 >
                                                     View
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteLead(lead.id)}
+                                                    className="text-sm text-red-400 hover:text-red-300 font-medium"
+                                                >
+                                                    Delete
                                                 </button>
                                             </td>
                                         </tr>
@@ -208,17 +263,26 @@ const StatCard = ({ title, value, icon: Icon, color, bg, border }) => (
     </motion.div>
 );
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, onChange }) => {
     const styles = {
         NOUVEAU: 'bg-blue-500/20 text-blue-400 border-blue-500/20',
         CONTACTE: 'bg-amber-500/20 text-amber-400 border-amber-500/20',
         SIGNE: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20',
         PERDU: 'bg-red-500/20 text-red-400 border-red-500/20',
     };
+
+    const statusOptions = ['NOUVEAU', 'CONTACTE', 'SIGNE', 'PERDU'];
+
     return (
-        <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${styles[status] || styles.NOUVEAU}`}>
-            {status || 'NEW'}
-        </span>
+        <select
+            value={status || 'NOUVEAU'}
+            onChange={(e) => onChange(e.target.value)}
+            className={`px-2 py-1 rounded-full text-xs font-medium border bg-transparent cursor-pointer focus:outline-none ${styles[status] || styles.NOUVEAU} appearance-none`}
+        >
+            {statusOptions.map(opt => (
+                <option key={opt} value={opt} className="bg-black text-white">{opt}</option>
+            ))}
+        </select>
     );
 };
 
