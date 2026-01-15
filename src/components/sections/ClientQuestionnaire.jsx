@@ -217,17 +217,27 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
 
             await submitLead('plan', mappedData);
 
-            // Success! Clear the draft and reset section
+            // CRITICAL: Clear EVERY trace of the draft immediately
             localStorage.removeItem('digiltizeme_draft_questionnaire');
             localStorage.removeItem('digiltizeme_draft_section');
+
+            // Reset local state to 0 and empty data
+            setFormData({});
             setCurrentSection(0);
+
             setIsSuccess(true);
+            console.log("✅ [SUCCESS] Submission complete, state fully reset.");
         } catch (error) {
             console.error("Submission error", error);
-            alert("Une erreur est survenue lors de l'envoi. Veuillez vérifier votre connexion et réessayer. Vos données ont été sauvegardées localement.");
+            alert("Une erreur est survenue lors de l'envoi. Vos données sont sauvegardées localement. Veuillez réessayer.");
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleNewProject = () => {
+        handleForceReset(); // Use our safe reset helper
+        setIsSuccess(false);
     };
 
     return (
@@ -301,12 +311,15 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
                                     </button>
 
                                     {isFullPage ? (
-                                        <a href="/" className="px-8 py-3 text-gray-400 hover:text-white transition-colors mt-4">
-                                            Retour à l'accueil
-                                        </a>
+                                        <button
+                                            onClick={handleNewProject}
+                                            className="px-8 py-3 text-gray-400 hover:text-white transition-colors mt-4"
+                                        >
+                                            Nouveau projet
+                                        </button>
                                     ) : (
-                                        <button onClick={onClose} className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors">
-                                            Fermer
+                                        <button onClick={() => { handleNewProject(); onClose(); }} className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors">
+                                            Terminer
                                         </button>
                                     )}
                                 </div>
