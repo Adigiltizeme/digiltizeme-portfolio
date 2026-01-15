@@ -206,8 +206,10 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
 
             await submitLead('plan', mappedData);
 
-            // Success! Clear the draft
+            // Success! Clear the draft and reset section
             localStorage.removeItem('digiltizeme_draft_questionnaire');
+            localStorage.removeItem('digiltizeme_draft_section');
+            setCurrentSection(0);
             setIsSuccess(true);
         } catch (error) {
             console.error("Submission error", error);
