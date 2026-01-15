@@ -54,6 +54,7 @@ function App() {
             <AdminManagementPage />
           </RequireAuth>
         } />
+        <Route path="/admin/crm" element={<Navigate to="/admin/dashboard" replace />} />
 
         {/* Redirect /admin to /admin/dashboard */}
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />

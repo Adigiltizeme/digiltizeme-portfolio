@@ -207,7 +207,9 @@ const ProfilePage = () => {
                         </div>
                     </motion.div>
                 </div>
-                );
+            </div>
+        </div>
+    );
 };
 
-                export default ProfilePage;
+export default ProfilePage;
