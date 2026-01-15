@@ -147,15 +147,26 @@ const SECTIONS = [
 const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
     const [currentSection, setCurrentSection] = useState(() => {
         const saved = localStorage.getItem('digiltizeme_draft_section');
+        console.log("🛠️ [DEBUG] Loading draft section:", saved);
         return saved ? parseInt(saved, 10) : 0;
     });
     const [formData, setFormData] = useState(() => {
-        // Load from localStorage on initialization
         const saved = localStorage.getItem('digiltizeme_draft_questionnaire');
+        console.log("🛠️ [DEBUG] Loading draft data exists:", !!saved);
         return saved ? JSON.parse(saved) : {};
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    // Force reset helper
+    const handleForceReset = () => {
+        localStorage.removeItem('digiltizeme_draft_questionnaire');
+        localStorage.removeItem('digiltizeme_draft_section');
+        setFormData({});
+        setCurrentSection(0);
+        setIsSuccess(false);
+        console.log("🛠️ [DEBUG] Manual reset triggered");
+    };
 
     // Save data to localStorage
     React.useEffect(() => {
@@ -232,12 +243,20 @@ const ClientQuestionnaire = ({ onClose, isFullPage = false }) => {
                 style={{ maxHeight: isFullPage ? 'none' : '90dvh' }} // Use dynamic viewport height
             >
                 {/* Header */}
-                <div className="flex justify-between items-center p-6 border-b border-white/5 bg-white/5">
-                    <div>
+                <div className="flex justify-between items-center p-6 border-b border-white/10 bg-white/5">
+                    <div className="flex items-center gap-4">
                         <h2 className="text-xl font-bold flex items-center gap-2">
                             <span className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full">Partie {currentSection + 1}/{SECTIONS.length}</span>
                             {SECTIONS[currentSection].title}
                         </h2>
+                        {isFullPage && (
+                            <button
+                                onClick={handleForceReset}
+                                className="text-[10px] uppercase font-bold text-gray-500 hover:text-white transition-colors"
+                            >
+                                Réinitialiser
+                            </button>
+                        )}
                     </div>
                     {!isFullPage && (
                         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
