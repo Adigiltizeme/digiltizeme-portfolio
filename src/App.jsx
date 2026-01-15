@@ -8,7 +8,6 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import ProfilePage from './pages/admin/ProfilePage';
 import AdminManagementPage from './pages/admin/AdminManagementPage';
-import CRMLeadsPage from './pages/admin/CRMLeadsPage';
 
 // ScrollToTop component to reset scroll on route change
 const ScrollToTop = () => {
@@ -53,11 +52,6 @@ function App() {
         <Route path="/admin/users" element={
           <RequireAuth>
             <AdminManagementPage />
-          </RequireAuth>
-        } />
-        <Route path="/admin/crm" element={
-          <RequireAuth>
-            <CRMLeadsPage />
           </RequireAuth>
         } />
 

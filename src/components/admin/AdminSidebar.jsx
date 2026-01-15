@@ -29,11 +29,6 @@ const AdminSidebar = () => {
             icon: LayoutDashboard
         },
         {
-            label: 'CRM Leads',
-            path: '/admin/crm',
-            icon: Users
-        },
-        {
             label: 'Gestion Admins',
             path: '/admin/users',
             icon: Shield,
@@ -64,8 +59,8 @@ const AdminSidebar = () => {
                             to={item.path}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
-                                    ? 'bg-white/10 text-white font-medium'
-                                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                                ? 'bg-white/10 text-white font-medium'
+                                : 'text-white/60 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <item.icon className={`w-5 h-5 ${isActive && item.primary ? 'text-primary-400' : ''}`} />

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield, Filter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getApiUrl } from '../../components/utils/formHandler';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
@@ -13,6 +13,7 @@ const DashboardPage = () => {
     const [stats, setStats] = useState({ total: 0, new: 0, potential: 0 });
     const [selectedLead, setSelectedLead] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('ALL');
 
     useEffect(() => {
         fetchLeads();
@@ -103,11 +104,16 @@ const DashboardPage = () => {
         navigate('/admin/login');
     };
 
-    const filteredLeads = leads.filter(lead =>
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (lead.company && lead.company.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+    const filteredLeads = leads.filter(lead => {
+        const matchesSearch =
+            lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (lead.company && lead.company.toLowerCase().includes(searchQuery.toLowerCase()));
+
+        const matchesStatus = statusFilter === 'ALL' || lead.status === statusFilter;
+
+        return matchesSearch && matchesStatus;
+    });
 
     return (
         <div className="min-h-screen bg-black text-white font-sans selection:bg-primary-500/30">
@@ -145,17 +151,36 @@ const DashboardPage = () => {
 
                 {/* Leads Table Section */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm">
-                    <div className="p-6 border-b border-white/10 flex justify-between items-center">
-                        <h2 className="text-xl font-bold">Recent Leads</h2>
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-                            <input
-                                type="text"
-                                placeholder="Rechercher un prospect..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20"
-                            />
+                    <div className="p-6 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h2 className="text-xl font-bold">CRM Leads & Prospects</h2>
+                        <div className="flex items-center gap-3 w-full sm:w-auto">
+                            {/* Status Filter */}
+                            <div className="relative flex-1 sm:flex-none">
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                                <select
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20 appearance-none min-w-[140px]"
+                                >
+                                    <option value="ALL">Tous les statuts</option>
+                                    <option value="NOUVEAU">Nouveaux</option>
+                                    <option value="CONTACTE">Contactés</option>
+                                    <option value="SIGNE">Signés</option>
+                                    <option value="PERDU">Perdus</option>
+                                </select>
+                            </div>
+
+                            {/* Search */}
+                            <div className="relative flex-1 sm:flex-none">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                                <input
+                                    type="text"
+                                    placeholder="Rechercher..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20"
+                                />
+                            </div>
                         </div>
                     </div>
 
