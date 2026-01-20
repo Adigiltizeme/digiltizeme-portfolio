@@ -1,14 +1,39 @@
-
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Phone, Calendar, Building, FileText, Globe, Target, DollarSign, Share2 } from 'lucide-react';
-import { downloadMarkmap } from '../utils/markmapExporter';
+import { useNavigate } from 'react-router-dom';
+import { X, Mail, Phone, Calendar, Building, FileText, Globe, Target, DollarSign, Share2, Terminal } from 'lucide-react';
+import { getApiUrl } from '../utils/formHandler';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const LeadDetailModal = ({ lead, onClose }) => {
+    const navigate = useNavigate();
     if (!lead) return null;
 
     const handleExportMindMap = () => {
         downloadMarkmap(lead);
+    };
+
+    const handleInitProject = async () => {
+        if (!window.confirm('Voulez-vous mobiliser l\'équipe Dev\'OMax pour ce projet ?')) return;
+
+        try {
+            const token = localStorage.getItem('adminToken');
+            const API_URL = getApiUrl();
+
+            const response = await fetch(`${API_URL}/projects/init/${lead.id}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const project = await response.json();
+                onClose();
+                navigate(`/admin/dev-omax/${project.id}`);
+            } else {
+                const err = await response.json();
+                alert(`Erreur: ${err.message || 'Impossible d\'initialiser le projet'}`);
+            }
+        } catch (error) {
+            console.error('❌ Failed to init project:', error);
+        }
     };
 
     return (
@@ -148,6 +173,15 @@ const LeadDetailModal = ({ lead, onClose }) => {
                         >
                             <Mail size={18} /> Répondre
                         </a>
+
+                        {lead.status === 'SIGNE' && (
+                            <button
+                                onClick={handleInitProject}
+                                className="px-6 py-2.5 rounded-xl font-bold bg-cyan-400 text-black hover:shadow-[0_0_20px_#22d3ee] transition-all flex items-center gap-2"
+                            >
+                                <Terminal size={18} /> Mobiliser Dev'OMax
+                            </button>
+                        )}
                     </div>
                 </motion.div>
             </div>

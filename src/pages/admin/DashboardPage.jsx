@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield, Filter } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, TrendingUp, Search, User, Shield, Filter, Terminal } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getApiUrl } from '../../components/utils/formHandler';
 import LeadDetailModal from '../../components/admin/LeadDetailModal';
@@ -95,6 +95,30 @@ const DashboardPage = () => {
             }
         } catch (error) {
             console.error('❌ Failed to delete lead:', error);
+        }
+    };
+
+    const handleInitProject = async (leadId) => {
+        if (!window.confirm('Voulez-vous mobiliser l\'équipe Dev\'OMax pour ce projet ?')) return;
+
+        try {
+            const token = localStorage.getItem('adminToken');
+            const API_URL = getApiUrl();
+
+            const response = await fetch(`${API_URL}/projects/init/${leadId}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const project = await response.json();
+                navigate(`/admin/dev-omax/${project.id}`);
+            } else {
+                const err = await response.json();
+                alert(`Erreur: ${err.message || 'Impossible d\'initialiser le projet'}`);
+            }
+        } catch (error) {
+            console.error('❌ Failed to init project:', error);
         }
     };
 
@@ -224,6 +248,14 @@ const DashboardPage = () => {
                                                 {new Date(lead.createdAt).toLocaleDateString()}
                                             </td>
                                             <td className="px-6 py-4 flex items-center gap-3">
+                                                {lead.status === 'SIGNE' && (
+                                                    <button
+                                                        onClick={() => handleInitProject(lead.id)}
+                                                        className="p-1.5 rounded-lg bg-cyan-400/10 text-cyan-400 hover:bg-cyan-400/20 transition-colors title='Mobiliser Dev\'OMax'"
+                                                    >
+                                                        <Terminal className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                                 <button
                                                     onClick={() => setSelectedLead(lead)}
                                                     className="text-sm text-primary-400 hover:text-primary-300 font-medium"

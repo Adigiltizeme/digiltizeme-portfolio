@@ -7,7 +7,8 @@ import {
     User,
     LogOut,
     Menu,
-    X
+    X,
+    Terminal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,6 +28,11 @@ const AdminSidebar = () => {
             label: 'Dashboard',
             path: '/admin/dashboard',
             icon: LayoutDashboard
+        },
+        {
+            label: "Dev'OMax",
+            path: '/admin/dev-omax',
+            icon: Terminal
         },
         {
             label: 'Gestion Admins',
