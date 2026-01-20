@@ -14,7 +14,8 @@ import {
     Zap,
     Layout,
     ShieldAlert,
-    TrendingUp
+    TrendingUp,
+    FileCode
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminSidebar from '../../components/admin/AdminSidebar';
@@ -478,8 +479,8 @@ const DevOMaxPage = () => {
                                                                 key={file.id}
                                                                 onClick={() => setSelectedFile(file)}
                                                                 className={`text-left p-3 rounded-xl border transition-all text-xs font-mono group flex items-center justify-between ${selectedFile?.id === file.id
-                                                                        ? 'bg-cyan-400/10 border-cyan-400 text-cyan-400'
-                                                                        : 'bg-white/5 border-white/10 text-white/60 hover:border-white/20 hover:text-white'
+                                                                    ? 'bg-cyan-400/10 border-cyan-400 text-cyan-400'
+                                                                    : 'bg-white/5 border-white/10 text-white/60 hover:border-white/20 hover:text-white'
                                                                     }`}
                                                             >
                                                                 <div className="flex items-center gap-2 truncate">
@@ -487,8 +488,8 @@ const DevOMaxPage = () => {
                                                                     <span className="truncate">{file.path}</span>
                                                                 </div>
                                                                 <div className={`w-2 h-2 rounded-full ${file.status === 'APPROVED' ? 'bg-green-500' :
-                                                                        file.status === 'REJECTED' ? 'bg-red-500' :
-                                                                            'bg-yellow-500'
+                                                                    file.status === 'REJECTED' ? 'bg-red-500' :
+                                                                        'bg-yellow-500'
                                                                     }`} />
                                                             </button>
                                                         )) : (
@@ -507,8 +508,8 @@ const DevOMaxPage = () => {
                                                                     <span className="text-xs text-white/60 font-mono">{selectedFile.path}</span>
                                                                     <div className="flex items-center gap-2">
                                                                         <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${selectedFile.status === 'APPROVED' ? 'text-green-400 bg-green-400/10' :
-                                                                                selectedFile.status === 'REJECTED' ? 'text-red-400 bg-red-400/10' :
-                                                                                    'text-yellow-400 bg-yellow-400/10'
+                                                                            selectedFile.status === 'REJECTED' ? 'text-red-400 bg-red-400/10' :
+                                                                                'text-yellow-400 bg-yellow-400/10'
                                                                             }`}>{selectedFile.status}</span>
                                                                     </div>
                                                                 </div>
