@@ -324,7 +324,7 @@ const DevOMaxPage = () => {
 
     if (projectId && project) {
         return (
-            <div className={`min-h-screen ${colors.bg} text-white font-sans selection:bg-cyan-500/30 overflow-x-hidden`}>
+            <div className={`min-h-screen ${colors.bg} text-white font-sans selection:bg-cyan-400/40 selection:text-white overflow-x-hidden`}>
                 <ProjectSidebar projectId={projectId} projectName={project.name} />
                 <main className="lg:ml-64 relative z-0 min-h-screen flex flex-col">
                     {/* Header Execution */}
@@ -632,17 +632,27 @@ const DevOMaxPage = () => {
                                     </div>
                                     <div className="p-4 bg-black/40 border-t border-white/10">
                                         <div className="relative">
-                                            <input
-                                                type="text"
-                                                placeholder="Envoyer une directive à l'équipe..."
+                                            <textarea
+                                                placeholder="Envoyer une directive à l'équipe... (Shift+Enter pour nouvelle ligne)"
                                                 value={message}
                                                 onChange={(e) => setMessage(e.target.value)}
-                                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-12 text-sm focus:outline-none focus:border-cyan-400/50 transition-all font-mono"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                                        e.preventDefault();
+                                                        handleSendMessage();
+                                                    }
+                                                }}
+                                                rows={1}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-6 pr-12 text-sm focus:outline-none focus:border-cyan-400/50 transition-all font-mono resize-none overflow-hidden"
+                                                style={{
+                                                    minHeight: '56px',
+                                                    maxHeight: '200px',
+                                                    height: message.split('\n').length > 1 ? `${Math.min(56 + (message.split('\n').length - 1) * 24, 200)}px` : '56px'
+                                                }}
                                             />
                                             <button
                                                 onClick={handleSendMessage}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-cyan-400 text-black flex items-center justify-center hover:scale-105 transition-transform"
+                                                className="absolute right-3 top-4 w-8 h-8 rounded-lg bg-cyan-400 text-black flex items-center justify-center hover:scale-105 transition-transform"
                                             >
                                                 <Play className="w-4 h-4 fill-current" />
                                             </button>
