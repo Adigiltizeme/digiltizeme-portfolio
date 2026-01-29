@@ -34,7 +34,7 @@ const DevOMaxPage = () => {
     const [message, setMessage] = useState('');
     const [tasks, setTasks] = useState([]);
     const [proposals, setProposals] = useState([]);
-    const [activeTab, setActiveTab] = useState(tab || 'discussion'); // discussion, tasks, files, security
+    const [activeTab, setActiveTab] = useState(tab || 'brief'); // brief, discussion, kanban, files, security, stats
     const [selectedFile, setSelectedFile] = useState(null);
 
     // Sync activeTab with URL param
@@ -65,7 +65,7 @@ const DevOMaxPage = () => {
     useEffect(() => {
         if (projectId) {
             fetchProjectDetails();
-            if (activeTab === 'tasks' || activeTab === 'stats') fetchTasks();
+            if (activeTab === 'kanban' || activeTab === 'stats') fetchTasks();
             if (activeTab === 'files' || activeTab === 'stats') fetchProposals();
         } else {
             fetchProjects();
@@ -344,13 +344,13 @@ const DevOMaxPage = () => {
                             </div>
 
                             <div className="flex items-center gap-3 bg-white/5 p-1 rounded-2xl border border-white/10">
-                                {['discussion', 'tasks', 'files', 'security', 'stats'].map(t => (
+                                {['brief', 'discussion', 'kanban', 'files', 'security', 'stats'].map(t => (
                                     <button
                                         key={t}
                                         onClick={() => handleTabChange(t)}
-                                        className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${activeTab === t ? 'bg-cyan-400 text-black shadow-[0_0_20px_#22d3ee]' : 'text-white/40 hover:text-white'}`}
+                                        className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${activeTab === t ? 'bg-cyan-400 text-black shadow-[0_0_20px_#22d3ee]' : 'text-white/40 hover:text-white'}`}
                                     >
-                                        {t === 'security' ? 'Cyber' : t === 'stats' ? 'KPIs' : t}
+                                        {t === 'security' ? 'Cyber' : t === 'stats' ? 'KPIs' : t === 'brief' ? 'Brief' : t}
                                     </button>
                                 ))}
                             </div>
@@ -375,7 +375,95 @@ const DevOMaxPage = () => {
                                     </div>
                                     <div className="flex-1 p-6 overflow-y-auto space-y-4">
                                         <AnimatePresence mode="wait">
-                                            {activeTab === 'discussion' ? (
+                                            {activeTab === 'brief' && (
+                                                <motion.div
+                                                    key="brief"
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    exit={{ opacity: 0, x: 20 }}
+                                                    className="p-6 space-y-6"
+                                                >
+                                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                                        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                                            <Terminal className="w-5 h-5 text-cyan-400" />
+                                                            Cadrage Projet
+                                                        </h3>
+                                                        <div className="space-y-4">
+                                                            <div>
+                                                                <label className="text-[10px] uppercase text-white/40 mb-2 block tracking-widest">Objectif Client</label>
+                                                                <p className="text-white/80 font-serif italic text-lg line-relaxed">"{project.lead?.goal || 'Non spécifié'}"</p>
+                                                            </div>
+                                                            <div>
+                                                                <label className="text-[10px] uppercase text-white/40 mb-2 block tracking-widest">Description Détaillée</label>
+                                                                <div className="bg-black/20 p-4 rounded-xl text-sm text-white/60 leading-relaxed max-h-[200px] overflow-y-auto">
+                                                                    {project.lead?.description || 'Aucune description disponible.'}
+                                                                </div>
+                                                            </div>
+                                                            <button
+                                                                onClick={() => {
+                                                                    setMessage("Analyse ce projet et propose un plan d'action détaillé.");
+                                                                    handleSendMessage();
+                                                                    setActiveTab('discussion');
+                                                                }}
+                                                                className="w-full py-4 bg-cyan-400/10 border border-cyan-400/20 text-cyan-400 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-cyan-400 hover:text-black transition-all"
+                                                            >
+                                                                Lancer l'Analyse IA Dev'OMax
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    {project.aiSummary && (
+                                                        <div className="bg-cyan-400/5 border border-cyan-400/20 rounded-2xl p-6">
+                                                            <label className="text-[10px] uppercase text-cyan-400 mb-2 block tracking-widest font-bold">Résumé Stratégique (IA)</label>
+                                                            <p className="text-white/80 text-sm italic">{project.aiSummary}</p>
+                                                        </div>
+                                                    )}
+                                                </motion.div>
+                                            )}
+
+                                            {activeTab === 'kanban' && (
+                                                <motion.div
+                                                    key="kanban"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    className="p-4 h-full"
+                                                >
+                                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-full">
+                                                        {['TODO', 'IN_PROGRESS', 'REVIEW', 'DONE'].map(col => (
+                                                            <div key={col} className="bg-black/20 rounded-2xl p-3 flex flex-col gap-3 min-h-[500px]">
+                                                                <div className="flex items-center justify-between px-2">
+                                                                    <span className="text-[10px] font-bold uppercase tracking-tight text-white/40">{col}</span>
+                                                                    <span className="bg-white/5 text-[9px] px-2 py-0.5 rounded-full text-white/60">
+                                                                        {tasks.filter(t => t.status === col).length}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex-1 space-y-3">
+                                                                    {tasks.filter(t => t.status === col).map(task => (
+                                                                        <div
+                                                                            key={task.id}
+                                                                            onClick={() => handleToggleTask(task.id, task.status)}
+                                                                            className="bg-white/5 border border-white/10 p-3 rounded-xl hover:border-cyan-400/30 cursor-pointer transition-all group"
+                                                                        >
+                                                                            <div className="flex items-center gap-1.5 mb-2">
+                                                                                <div className={`w-1.5 h-1.5 rounded-full ${task.kind === 'DEV' ? 'bg-blue-400' :
+                                                                                    task.kind === 'DESIGN' ? 'bg-pink-400' :
+                                                                                        task.kind === 'QA' ? 'bg-yellow-400' : 'bg-cyan-400'
+                                                                                    }`} />
+                                                                                <span className="text-[9px] text-white/30 uppercase font-bold">{task.kind || 'GENERAL'}</span>
+                                                                                {task.aiGenerated && <Zap className="w-2.5 h-2.5 text-yellow-400 animate-pulse" />}
+                                                                            </div>
+                                                                            <h4 className="text-xs font-bold text-white/90 group-hover:text-cyan-400 transition-colors">{task.title}</h4>
+                                                                            {task.description && <p className="text-[10px] text-white/40 mt-1 line-clamp-2">{task.description}</p>}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+
+                                            {activeTab === 'discussion' && (
                                                 <motion.div
                                                     key="discussion"
                                                     initial={{ opacity: 0, y: 10 }}
@@ -431,48 +519,17 @@ const DevOMaxPage = () => {
                                                         </div>
                                                     )}
                                                 </motion.div>
-                                            ) : activeTab === 'tasks' ? (
-                                                <motion.div
-                                                    key="tasks"
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -10 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="space-y-4 font-sans"
-                                                >
-                                                    {tasks.length > 0 ? tasks.map(task => (
-                                                        <div key={task.id} className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between group hover:border-cyan-400/30 transition-all">
-                                                            <div className="flex items-center gap-4">
-                                                                <button
-                                                                    onClick={() => handleToggleTask(task.id, task.status)}
-                                                                    className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${task.status === 'DONE' ? 'bg-cyan-400 border-cyan-400 text-black' : 'border-white/20 text-transparent hover:border-cyan-400/50'}`}
-                                                                >
-                                                                    <CheckCircle2 className="w-4 h-4" />
-                                                                </button>
-                                                                <div>
-                                                                    <h4 className={`font-bold uppercase tracking-tight ${task.status === 'DONE' ? 'text-white/40 line-through' : 'text-white'}`}>{task.title}</h4>
-                                                                    <p className="text-[10px] text-white/30 uppercase tracking-widest">{task.agent?.name || 'Non assigné'} // {task.status}</p>
-                                                                </div>
-                                                            </div>
-                                                            <Clock className="w-4 h-4 text-white/10 group-hover:text-cyan-400/40 transition-colors" />
-                                                        </div>
-                                                    )) : (
-                                                        <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-white/20 gap-4">
-                                                            <CheckCircle2 className="w-12 h-12 opacity-20" />
-                                                            <p className="text-sm font-mono tracking-widest text-center">PLANIFICATION DES SPRINT EN COURS...</p>
-                                                        </div>
-                                                    )}
-                                                </motion.div>
-                                            ) : activeTab === 'files' ? (
+                                            )}
+
+                                            {activeTab === 'files' && (
                                                 <motion.div
                                                     key="files"
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     exit={{ opacity: 0, y: -10 }}
                                                     transition={{ duration: 0.2 }}
-                                                    className="h-[600px] flex flex-col md:flex-row gap-6 font-sans"
+                                                    className="h-[600px] flex flex-col md:flex-row gap-6"
                                                 >
-                                                    {/* File Tree / List */}
                                                     <div className="w-full md:w-1/3 flex flex-col gap-2 overflow-y-auto pr-2">
                                                         {proposals.length > 0 ? proposals.map(file => (
                                                             <button
@@ -500,7 +557,6 @@ const DevOMaxPage = () => {
                                                         )}
                                                     </div>
 
-                                                    {/* Code Viewer Panel */}
                                                     <div className="flex-1 bg-[#1e1e1e] rounded-xl border border-white/10 overflow-hidden flex flex-col shadow-inner">
                                                         {selectedFile ? (
                                                             <>
@@ -513,122 +569,94 @@ const DevOMaxPage = () => {
                                                                             }`}>{selectedFile.status}</span>
                                                                     </div>
                                                                 </div>
-                                                                <div className="flex-1 overflow-auto custom-scrollbar relative group/code text-xs">
+                                                                <div className="flex-1 overflow-auto bg-[#1e1e1e]">
                                                                     <SyntaxHighlighter
-                                                                        language={selectedFile.path.endsWith('json') ? 'json' : 'javascript'}
+                                                                        language={selectedFile.path.split('.').pop()}
                                                                         style={atomDark}
-                                                                        customStyle={{ margin: 0, padding: '1.5rem', background: 'transparent' }}
-                                                                        showLineNumbers={true}
-                                                                        wrapLines={true}
+                                                                        customStyle={{
+                                                                            margin: 0,
+                                                                            padding: '24px',
+                                                                            background: 'transparent',
+                                                                            fontSize: '12px'
+                                                                        }}
                                                                     >
                                                                         {selectedFile.content}
                                                                     </SyntaxHighlighter>
                                                                 </div>
-                                                                <div className="p-3 bg-[#2d2d2d] border-t border-white/5 flex justify-end gap-2">
-                                                                    <button
-                                                                        onClick={() => handleUpdateProposal(selectedFile.id, 'REJECTED')}
-                                                                        className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 text-[10px] font-bold uppercase transition-colors"
-                                                                    >
-                                                                        Rejeter
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => handleUpdateProposal(selectedFile.id, 'APPROVED')}
-                                                                        className="px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-[10px] font-bold uppercase transition-colors"
-                                                                    >
-                                                                        Valider
-                                                                    </button>
+                                                                <div className="p-4 bg-black/40 border-t border-white/5 flex justify-end gap-3">
+                                                                    {selectedFile.status === 'PENDING' && (
+                                                                        <>
+                                                                            <button
+                                                                                onClick={() => handleUpdateProposal(selectedFile.id, 'REJECTED')}
+                                                                                className="px-4 py-2 rounded-lg bg-red-400/10 text-red-400 text-xs font-bold uppercase tracking-wider hover:bg-red-400 hover:text-white transition-all"
+                                                                            >
+                                                                                Rejeter
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => handleUpdateProposal(selectedFile.id, 'APPROVED')}
+                                                                                className="px-4 py-2 rounded-lg bg-green-400 text-black text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all"
+                                                                            >
+                                                                                Valider & Appliquer
+                                                                            </button>
+                                                                        </>
+                                                                    )}
                                                                 </div>
                                                             </>
                                                         ) : (
-                                                            <div className="flex-1 flex flex-col items-center justify-center text-white/20 gap-4">
-                                                                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                                                                    <Code2 className="w-8 h-8 opacity-20" />
-                                                                </div>
-                                                                <p className="text-sm font-mono uppercase tracking-widest text-center">Sélectionnez un artefact</p>
+                                                            <div className="flex flex-col items-center justify-center h-full text-white/10 gap-4">
+                                                                <Terminal className="w-12 h-12 opacity-10" />
+                                                                <span className="text-xs font-mono tracking-widest">SÉLECTIONNEZ UN FICHIER POUR ANALYSE</span>
                                                             </div>
                                                         )}
                                                     </div>
                                                 </motion.div>
-                                            ) : activeTab === 'security' ? (
+                                            )}
+
+                                            {activeTab === 'security' && (
                                                 <motion.div
                                                     key="security"
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -10 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="space-y-8 font-sans"
+                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.95 }}
+                                                    className="flex flex-col items-center justify-center h-full min-h-[500px] text-cyan-400 gap-6"
                                                 >
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <div className="p-6 rounded-3xl bg-red-500/5 border border-red-500/10">
-                                                            <div className="flex items-center gap-3 mb-4">
-                                                                <ShieldAlert className="w-5 h-5 text-red-500" />
-                                                                <h5 className="font-bold text-xs uppercase tracking-widest text-red-500">Failles Critiques</h5>
-                                                            </div>
-                                                            <div className="text-4xl font-black text-white">0</div>
-                                                        </div>
-                                                        <div className="p-6 rounded-3xl bg-green-500/5 border border-green-500/10">
-                                                            <div className="flex items-center gap-3 mb-4">
-                                                                <ShieldCheck className="w-5 h-5 text-green-500" />
-                                                                <h5 className="font-bold text-xs uppercase tracking-widest text-green-500">Santé Globale</h5>
-                                                            </div>
-                                                            <div className="text-4xl font-black text-white">98%</div>
-                                                        </div>
+                                                    <div className="relative">
+                                                        <ShieldAlert className="w-20 h-20 animate-pulse opacity-50" />
+                                                        <div className="absolute inset-0 bg-cyan-400 blur-3xl opacity-10" />
                                                     </div>
-                                                    <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-4">
-                                                        <h5 className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-400">Journal de Cypher</h5>
-                                                        <div className="space-y-3">
-                                                            {[
-                                                                "Audit src/App.jsx : OK (Aucune faille XSS détectée)",
-                                                                "Vérification des dépendances NPM : Sécurisé",
-                                                                "Cryptage des flux WebSocket : Actif",
-                                                                "Scan des secrets (ENV) : Propre"
-                                                            ].map((log, i) => (
-                                                                <div key={i} className="flex gap-3 text-[11px] font-mono text-white/40">
-                                                                    <span className="text-cyan-400/30">[{new Date().toLocaleTimeString()}]</span>
-                                                                    <span>{log}</span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
+                                                    <div className="text-center">
+                                                        <h3 className="text-lg font-bold uppercase tracking-widest mb-2 text-white">Sentinel & Cypher Protection</h3>
+                                                        <p className="text-xs text-white/40 max-w-sm font-mono uppercase tracking-widest">Scanning codebase for vulnerabilities... 100% Secure.</p>
                                                     </div>
                                                 </motion.div>
-                                            ) : (
+                                            )}
+
+                                            {activeTab === 'stats' && (
                                                 <motion.div
                                                     key="stats"
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -10 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="space-y-8 font-sans"
+                                                    className="p-8 h-full"
                                                 >
-                                                    <div className="grid grid-cols-2 gap-6">
-                                                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-                                                            <h4 className="font-bold uppercase tracking-widest text-white/60 mb-4 text-xs">Vélocité (Tâches)</h4>
-                                                            <div className="text-4xl font-black text-white mb-2">
-                                                                {Math.round((tasks.filter(t => t.status === 'DONE').length / (tasks.length || 1)) * 100)}%
-                                                            </div>
-                                                            <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                                                                <div
-                                                                    className="h-full bg-cyan-400"
-                                                                    style={{ width: `${Math.round((tasks.filter(t => t.status === 'DONE').length / (tasks.length || 1)) * 100)}%` }}
-                                                                />
-                                                            </div>
-                                                            <p className="text-[10px] text-white/30 mt-3 font-mono">{tasks.filter(t => t.status === 'DONE').length} / {tasks.length} Tâches complétées</p>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                                        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl group hover:border-cyan-400/30 transition-all">
+                                                            <TrendingUp className="w-8 h-8 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
+                                                            <h4 className="text-4xl font-bold text-white mb-2">{tasks.filter(t => t.status === 'DONE').length}</h4>
+                                                            <p className="text-xs text-white/40 uppercase tracking-widest">Tâches Accomplies</p>
                                                         </div>
-                                                        <div className="bg-white/5 border border-white/10 rounded-3xl p-6">
-                                                            <h4 className="font-bold uppercase tracking-widest text-white/60 mb-4 text-xs">Production (Fichiers)</h4>
-                                                            <div className="text-4xl font-black text-white mb-2">
-                                                                {proposals.length}
-                                                            </div>
-                                                            <p className="text-[10px] text-white/30 font-mono">Fichiers générés par l'équipe</p>
-                                                            <div className="mt-4 flex gap-2">
-                                                                <span className="text-[10px] px-2 py-1 bg-green-500/10 text-green-500 rounded border border-green-500/20">{proposals.filter(p => p.status === 'APPROVED').length} Validés</span>
-                                                                <span className="text-[10px] px-2 py-1 bg-yellow-500/10 text-yellow-500 rounded border border-yellow-500/20">{proposals.filter(p => p.status === 'PENDING').length} En attente</span>
-                                                            </div>
+                                                        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl group hover:border-green-400/30 transition-all">
+                                                            <Zap className="w-8 h-8 text-green-400 mb-4 group-hover:scale-110 transition-transform" />
+                                                            <h4 className="text-4xl font-bold text-white mb-2">{proposals.filter(p => p.status === 'APPROVED').length}</h4>
+                                                            <p className="text-xs text-white/40 uppercase tracking-widest">Fichiers Validés</p>
+                                                        </div>
+                                                        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl group hover:border-yellow-400/30 transition-all">
+                                                            <Clock className="w-8 h-8 text-yellow-400 mb-4 group-hover:scale-110 transition-transform" />
+                                                            <h4 className="text-4xl font-bold text-white mb-2">{tasks.filter(t => t.status !== 'DONE').length}</h4>
+                                                            <p className="text-xs text-white/40 uppercase tracking-widest">Points en Attente</p>
                                                         </div>
                                                     </div>
                                                 </motion.div>
-                                            )}
-                                        </AnimatePresence>
+                                            )}                                        </AnimatePresence>
                                     </div>
                                     <div className="p-4 bg-black/40 border-t border-white/10">
                                         <div className="relative">

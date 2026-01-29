@@ -7,7 +7,8 @@ import {
     ShieldAlert,
     ChevronLeft,
     TrendingUp,
-    Settings
+    Settings,
+    Cpu
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -16,20 +17,26 @@ const ProjectSidebar = ({ projectId, projectName }) => {
 
     const menuItems = [
         {
-            id: 'discussion',
-            label: 'Discussion',
-            icon: MessageSquare,
-            path: `/admin/dev-omax/${projectId}`
+            id: 'brief',
+            label: 'Cadrage & Briefing',
+            icon: Cpu,
+            path: `/admin/dev-omax/${projectId}/brief`
         },
         {
-            id: 'tasks',
-            label: 'Tâches & Sprints',
+            id: 'discussion',
+            label: 'Flux Discussion',
+            icon: MessageSquare,
+            path: `/admin/dev-omax/${projectId}/discussion`
+        },
+        {
+            id: 'kanban',
+            label: 'Production Kanban',
             icon: CheckSquare,
-            path: `/admin/dev-omax/${projectId}/tasks`
+            path: `/admin/dev-omax/${projectId}/kanban`
         },
         {
             id: 'files',
-            label: 'Système de Fichiers',
+            label: 'Explorateur Fichiers',
             icon: FileCode,
             path: `/admin/dev-omax/${projectId}/files`
         },
@@ -41,7 +48,7 @@ const ProjectSidebar = ({ projectId, projectName }) => {
         },
         {
             id: 'stats',
-            label: 'Performance',
+            label: 'KPIs & Performance',
             icon: TrendingUp,
             path: `/admin/dev-omax/${projectId}/stats`
         }
