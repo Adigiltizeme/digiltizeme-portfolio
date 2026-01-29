@@ -363,7 +363,7 @@ const DevOMaxPage = () => {
 
                             {/* Left Panel: Workspace */}
                             <div className="lg:col-span-8 flex flex-col gap-6">
-                                <div className={`${colors.card} ${colors.border} border rounded-3xl min-h-[600px] flex flex-col overflow-hidden`}>
+                                <div className={`${colors.card} ${colors.border} border rounded-3xl h-[calc(100vh-9rem)] flex flex-col overflow-hidden relative shadow-2xl`}>
                                     <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
                                         <div className="flex gap-1.5">
                                             <div className="w-2.5 h-2.5 rounded-full bg-red-500/40" />
