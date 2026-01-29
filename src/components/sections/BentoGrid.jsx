@@ -30,7 +30,7 @@ const projects = [
         name: "Semwee",
         category: "Web Marketing & SaaS",
         color: "from-pink-500 to-rose-600",
-        description: "Application de web marketing avec outil d'étude de marché intégré. Développeur Frontend Full Remote (5 mois).",
+        description: "Application de web marketing avec outil d'étude de marché automatisé intégré. Développeur Frontend Full Remote (5 mois).",
         tags: ["Angular", "TypeScript", "Node/Express", "MongoDB", "Trello", "Git"],
         features: [
             "Création de nouvelles fonctionnalités et refonte",
