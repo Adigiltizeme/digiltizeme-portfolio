@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Hero from '../components/sections/Hero';
 import BentoGrid from '../components/sections/BentoGrid';
 import Services from '../components/sections/Services';
+import Trainings from '../components/sections/Trainings';
 import QuoteSimulator from '../components/sections/QuoteSimulator';
 import Methodology from '../components/sections/Methodology';
 import Director from '../components/sections/Director';
@@ -24,6 +25,7 @@ const HomePage = () => {
         <>
             <Hero />
             <BentoGrid />
+            <Trainings />
             <Services />
             <QuoteSimulator />
             <Methodology onOpenFinancing={() => setIsFinancingOpen(true)} />

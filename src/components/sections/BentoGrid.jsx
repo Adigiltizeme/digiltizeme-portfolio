@@ -27,6 +27,21 @@ const projects = [
         liveUrl: "https://mytruck-transport.vercel.app/"
     },
     {
+        name: "Semwee",
+        category: "Web Marketing & SaaS",
+        color: "from-pink-500 to-rose-600",
+        description: "Application de web marketing avec outil d'étude de marché intégré. Développeur Frontend Full Remote (5 mois).",
+        tags: ["Angular", "TypeScript", "Node/Express", "MongoDB", "Trello", "Git"],
+        features: [
+            "Création de nouvelles fonctionnalités et refonte",
+            "Gestion de projet",
+            "Formation des nouveaux stagiaires à l'environnement de développement, git, Trello, etc.",
+            "Gestion serveur et base de données"
+        ],
+        className: "md:col-span-4",
+        image: "/projects/semwee.png"
+    },
+    {
         name: "O'Boricienne Burgers",
         category: "Web / Mobile Apps & FoodTech",
         color: "from-yellow-400 to-orange-600",

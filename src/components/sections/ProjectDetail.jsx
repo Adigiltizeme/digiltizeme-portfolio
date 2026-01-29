@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { ArrowUpRight, CheckCircle, Smartphone, Monitor, Globe, X, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import LinkedInShareButton from '../ui/LinkedInShareButton';
 
 const ProjectDetail = ({ project }) => {
     const [selectedImage, setSelectedImage] = useState(null);
+    const isAdmin = !!localStorage.getItem('adminToken');
 
     if (!project) return null;
 
@@ -155,7 +157,7 @@ const ProjectDetail = ({ project }) => {
                 )}
 
                 {/* Call to Action */}
-                <div className="mt-auto">
+                <div className="mt-auto space-y-3">
                     {project.liveUrl && (
                         <a
                             href={project.liveUrl}
@@ -168,7 +170,8 @@ const ProjectDetail = ({ project }) => {
                             <ArrowUpRight size={20} className="group-hover:rotate-45 transition-transform" />
                         </a>
                     )}
-                    <div className="mt-4 text-center">
+                    {isAdmin && <LinkedInShareButton project={project} />}
+                    <div className="mt-2 text-center">
                         <button className="text-sm text-gray-500 hover:text-white transition-colors">
                             Demander un devis similaire
                         </button>
