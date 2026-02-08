@@ -6,13 +6,13 @@ import { Calendar, Clock, Video, CheckCircle } from 'lucide-react';
 const AppointmentPage = () => {
     return (
         <>
-            <Helmet>
+            {/* <Helmet>
                 <title>Prendre Rendez-vous | Digiltizème</title>
                 <meta
                     name="description"
                     content="Planifiez une consultation gratuite avec Digiltizème pour discuter de votre projet web, mobile ou SaaS."
                 />
-            </Helmet>
+            </Helmet> */}
 
             <div className="min-h-screen bg-black text-white">
                 {/* Header Section */}
