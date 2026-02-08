@@ -7,6 +7,8 @@ const EMAILJS_CONFIG = {
     SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID,
     TEMPLATE_ID_CONTACT: import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CONTACT,
     TEMPLATE_ID_PLAN: import.meta.env.VITE_EMAILJS_TEMPLATE_ID_PLAN,
+    TEMPLATE_ID_RDV: import.meta.env.VITE_EMAILJS_TEMPLATE_ID_RDV || import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CONTACT,
+    TEMPLATE_ID_CLIENT: import.meta.env.VITE_EMAILJS_TEMPLATE_ID_CLIENT_CONFIRMATION,
     PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 };
 
@@ -105,19 +107,103 @@ export const submitLead = async (formType, data) => {
         full_summary: formattedMessage,
         to_name: "Admin",
         from_name: data.name || "Prospect",
-        reply_to: data.email
+        reply_to: data.email,
+        // Match user's template variables (screenshot)
+        name: data.name,
+        nom: data.name,
+        email: data.email,
+        message: formattedMessage,
+        title: formType === 'contact' ? 'Contact Rapide' : 'Plan détaillé'
     };
 
     try {
+        // Envoi à l'ADMIN
         const response = await emailjs.send(
             EMAILJS_CONFIG.SERVICE_ID,
             templateId,
             emailData,
             EMAILJS_CONFIG.PUBLIC_KEY
         );
+
+        // Envoi au CLIENT (Confirmation) si un template dédié existe
+        if (EMAILJS_CONFIG.TEMPLATE_ID_CLIENT) {
+            console.log("📨 Sending confirmation to client...");
+            await emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID_CLIENT,
+                emailData,
+                EMAILJS_CONFIG.PUBLIC_KEY
+            ).catch(err => console.error("❌ Client confirmation fails:", err));
+        }
+
         return response;
     } catch (error) {
         console.error("❌ EmailJS Error:", error);
+        throw error;
+    }
+};
+
+/**
+ * Handles the appointment notification submission
+ */
+export const submitAppointment = async (data) => {
+    const formattedMessage = `
+=== Nouveau Rendez-vous ===
+Date: ${new Date().toLocaleString("fr-FR")}
+
+Client: ${data.clientName}
+Email: ${data.clientEmail}
+Téléphone: ${data.clientPhone || 'Non renseigné'}
+Date RDV: ${data.appointmentDate}
+Type: ${data.meetingType || 'Consultation'}
+Notes: ${data.notes || 'Aucune'}
+`;
+
+    console.log("🚀 [Simulation] Sending Appointment Notification:", data);
+
+    if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY' || !EMAILJS_CONFIG.PUBLIC_KEY) {
+        console.warn("⚠️ EmailJS not configured for appointments.");
+        return { status: 'simulated' };
+    }
+
+    const emailData = {
+        ...data,
+        full_summary: formattedMessage,
+        to_name: "Admin",
+        from_name: data.clientName,
+        reply_to: data.clientEmail,
+        appointment_summary: `${data.clientName} - ${data.appointmentDate}`,
+        // Match user's template variables (screenshot)
+        name: data.clientName,
+        nom: data.clientName,
+        email: data.clientEmail,
+        message: formattedMessage,
+        title: `RDV: ${data.clientName}`
+    };
+
+    try {
+        // Envoi à l'ADMIN
+        const response = await emailjs.send(
+            EMAILJS_CONFIG.SERVICE_ID,
+            EMAILJS_CONFIG.TEMPLATE_ID_RDV,
+            emailData,
+            EMAILJS_CONFIG.PUBLIC_KEY
+        );
+
+        // Envoi au CLIENT (Confirmation)
+        if (EMAILJS_CONFIG.TEMPLATE_ID_CLIENT) {
+            console.log("📨 Sending RDV confirmation to client...");
+            await emailjs.send(
+                EMAILJS_CONFIG.SERVICE_ID,
+                EMAILJS_CONFIG.TEMPLATE_ID_CLIENT,
+                emailData,
+                EMAILJS_CONFIG.PUBLIC_KEY
+            ).catch(err => console.error("❌ Client RDV confirmation fails:", err));
+        }
+
+        return response;
+    } catch (error) {
+        console.error("❌ EmailJS Appointment Notification Error:", error);
         throw error;
     }
 };

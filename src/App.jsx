@@ -4,11 +4,13 @@ import MainLayout from './components/layout/MainLayout';
 import HomePage from './pages/HomePage';
 import ContactPage from './pages/ContactPage';
 import QuestionnairePage from './pages/QuestionnairePage';
+import AppointmentPage from './pages/AppointmentPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import ProfilePage from './pages/admin/ProfilePage';
 import AdminManagementPage from './pages/admin/AdminManagementPage';
 import DevOMaxPage from './pages/admin/DevOMaxPage';
+import AdminAppointmentsPage from './pages/admin/AdminAppointmentsPage';
 
 // ScrollToTop component to reset scroll on route change
 const ScrollToTop = () => {
@@ -37,6 +39,7 @@ function App() {
         <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
         <Route path="/contact" element={<MainLayout><ContactPage /></MainLayout>} />
         <Route path="/plan" element={<MainLayout><QuestionnairePage /></MainLayout>} />
+        <Route path="/rdv" element={<MainLayout><AppointmentPage /></MainLayout>} />
 
         {/* Admin Routes - No Public Layout */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
@@ -68,6 +71,11 @@ function App() {
         <Route path="/admin/dev-omax/:projectId/:tab" element={
           <RequireAuth>
             <DevOMaxPage />
+          </RequireAuth>
+        } />
+        <Route path="/admin/appointments" element={
+          <RequireAuth>
+            <AdminAppointmentsPage />
           </RequireAuth>
         } />
         <Route path="/admin/crm" element={<Navigate to="/admin/dashboard" replace />} />

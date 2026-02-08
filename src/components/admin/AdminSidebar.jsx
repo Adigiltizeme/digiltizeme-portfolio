@@ -8,7 +8,8 @@ import {
     LogOut,
     Menu,
     X,
-    Terminal
+    Terminal,
+    Calendar
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -33,6 +34,11 @@ const AdminSidebar = () => {
             label: "Dev'OMax",
             path: '/admin/dev-omax',
             icon: Terminal
+        },
+        {
+            label: 'Rendez-vous',
+            path: '/admin/appointments',
+            icon: Calendar
         },
         {
             label: 'Gestion Admins',
@@ -65,8 +71,8 @@ const AdminSidebar = () => {
                             to={item.path}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
-                                ? 'bg-white/10 text-white font-medium'
-                                : 'text-white/60 hover:text-white hover:bg-white/5'
+                                ? 'bg-white/10 text-white font-bold shadow-[0_0_15px_rgba(255,255,255,0.05)]'
+                                : 'text-gray-400 font-medium hover:text-white hover:bg-white/10'
                                 }`}
                         >
                             <item.icon className={`w-5 h-5 ${isActive && item.primary ? 'text-primary-400' : ''}`} />
@@ -105,7 +111,7 @@ const AdminSidebar = () => {
             </div>
 
             {/* Desktop Sidebar */}
-            <nav className="fixed top-0 left-0 w-64 h-full border-r border-white/10 bg-black/50 backdrop-blur-xl p-6 hidden lg:flex flex-col z-40">
+            <nav className="fixed top-0 left-0 w-64 h-full border-r border-white/20 bg-zinc-950/80 backdrop-blur-xl p-6 hidden lg:flex flex-col z-40">
                 <SidebarContent />
             </nav>
 
