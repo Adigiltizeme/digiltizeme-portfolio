@@ -180,11 +180,11 @@ const DashboardPage = () => {
                         <div className="flex items-center gap-3 w-full sm:w-auto">
                             {/* Status Filter */}
                             <div className="relative flex-1 sm:flex-none">
-                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                                <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20 appearance-none min-w-[140px]"
+                                    className="w-full bg-white/5 border border-white/20 rounded-lg pl-10 pr-4 py-2 text-sm text-gray-200 focus:outline-none focus:border-orange-500/50 appearance-none min-w-[140px]"
                                 >
                                     <option value="ALL">Tous les statuts</option>
                                     <option value="NOUVEAU">Nouveaux</option>
@@ -196,13 +196,13 @@ const DashboardPage = () => {
 
                             {/* Search */}
                             <div className="relative flex-1 sm:flex-none">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                 <input
                                     type="text"
                                     placeholder="Rechercher..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-white/20"
+                                    className="w-full bg-white/5 border border-white/20 rounded-lg pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-orange-500/50 placeholder:text-gray-500"
                                 />
                             </div>
                         </div>
@@ -295,8 +295,8 @@ const StatCard = ({ title, value, icon: Icon, color, bg, border }) => (
                 +12%
             </span>
         </div>
-        <div className="text-3xl font-bold mb-1">{value}</div>
-        <div className="text-white/40 text-sm">{title}</div>
+        <div className="text-3xl font-bold mb-1 text-white">{value}</div>
+        <div className="text-gray-400 text-sm font-medium">{title}</div>
     </motion.div>
 );
 

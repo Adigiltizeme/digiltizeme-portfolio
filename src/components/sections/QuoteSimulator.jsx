@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calculator, Smartphone, Globe, Code, Check, ArrowRight, RefreshCw } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const steps = [
     {
@@ -124,14 +125,12 @@ const QuoteSimulator = () => {
                                 </div>
 
                                 <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                                    <a
-                                        href="https://calendly.com"
-                                        target="_blank"
+                                    <Link to="/rdv"
                                         rel="noopener noreferrer"
                                         className="px-8 py-4 bg-white text-black font-bold rounded-xl hover:bg-orange-500 hover:text-white transition-colors flex items-center gap-2"
                                     >
                                         Discuter de ce budget <ArrowRight size={20} />
-                                    </a>
+                                    </Link>
                                     <button
                                         onClick={reset}
                                         className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-colors flex items-center gap-2"

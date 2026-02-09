@@ -24,10 +24,11 @@ const Footer = ({ onOpenQuestionnaire }) => {
                         <MessageCircle className="mb-3 text-green-500" size={32} />
                         <span className="font-bold">WhatsApp</span>
                     </a>
-                    <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-blue-500/50 transition-all group">
+                    <Link to="/rdv" className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-blue-500/50 transition-all group">
                         <Calendar className="mb-3 text-blue-500" size={32} />
-                        <span className="font-bold">RDV (Calendly)</span>
-                    </a>
+                        <span className="font-bold">Prendre RDV</span>
+                        <span className="text-xs text-gray-500">30min gratuit</span>
+                    </Link>
                     <a href="mailto:adama.digiltizeme@gmail.com" className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 transition-all group">
                         <Mail className="mb-3 text-purple-500" size={32} />
                         <span className="font-bold">Email</span>
